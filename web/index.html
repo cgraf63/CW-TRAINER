@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CW-Lernstation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Funkbude: kühles Graublau mit Signal-Bernstein. Layout: Kopfzeile mit Tempo-Status, Tabs, je Übung ein Arbeitsbereich mit Seitenspalte */
+  --bg:#e8ecef; --surface:#ffffff; --surface2:#f2f4f6; --ink:#14202a; --muted:#56646f; --line:#d2d9df;
+  --accent:#b45309; --accent-ink:#ffffff; --accent-soft:#fcebd5;
+  --good:#15803d; --good-soft:#dcf5e4; --bad:#b42318; --bad-soft:#fde4e1; --mid:#a16207; --mid-soft:#fdf3c9;
+  --f-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-body:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:10px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e151b; --surface:#16202a; --surface2:#1c2833; --ink:#e4ebf0; --muted:#94a3b0; --line:#293744;
+    --accent:#f0a830; --accent-ink:#1b1306; --accent-soft:#3a2b12;
+    --good:#4ade80; --good-soft:#123222; --bad:#f8877c; --bad-soft:#3b1a17; --mid:#facc15; --mid-soft:#352d0e;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e151b; --surface:#16202a; --surface2:#1c2833; --ink:#e4ebf0; --muted:#94a3b0; --line:#293744;
+  --accent:#f0a830; --accent-ink:#1b1306; --accent-soft:#3a2b12;
+  --good:#4ade80; --good-soft:#123222; --bad:#f8877c; --bad-soft:#3b1a17; --mid:#facc15; --mid-soft:#352d0e;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.2}
+h2{font-size:22px;font-weight:700}
+h3{font-size:15px;font-weight:700;letter-spacing:.01em}
+p{margin:0}
+.mono{font-family:var(--f-mono)}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+a{color:var(--accent)}
+button,select,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+header.top{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:14px 20px;background:var(--surface);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px}
+.brand .logo{font-family:var(--f-mono);font-weight:700;color:var(--accent);font-size:15px;letter-spacing:.08em}
+.brand h1{font-size:18px;font-weight:800}
+.status{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto;align-items:center}
+.pill{font-family:var(--f-mono);font-size:12px;padding:4px 9px;border-radius:999px;background:var(--surface2);border:1px solid var(--line);font-variant-numeric:tabular-nums;white-space:nowrap}
+nav.tabs{display:flex;gap:4px;padding:0 20px;background:var(--surface);border-bottom:1px solid var(--line);overflow-x:auto}
+nav.tabs a{padding:11px 14px;text-decoration:none;color:var(--muted);font-weight:600;border-bottom:3px solid transparent;white-space:nowrap}
+nav.tabs a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--accent)}
+nav.tabs a:hover{color:var(--ink)}
+main{max-width:1180px;margin:0 auto;padding:22px 20px 60px}
+.view{display:none;flex-direction:column;gap:18px}
+.view.on{display:flex}
+.vhead{display:flex;flex-direction:column;gap:6px;max-width:72ch}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px;align-items:start}
+@media (max-width:900px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--line);background:var(--surface2);padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:600}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.ghost{background:transparent}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);font-weight:600}
+input[type=text],input[type=number],select,textarea{background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;color:var(--ink)}
+textarea{resize:vertical;min-height:70px}
+input[type=range]{accent-color:var(--accent);width:100%}
+.big-input{font-family:var(--f-mono);font-size:30px;letter-spacing:.25em;text-transform:uppercase;padding:12px 16px;width:100%;text-align:center}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-family:var(--f-mono);font-weight:700;min-width:34px;height:34px;padding:0 8px;display:inline-flex;align-items:center;justify-content:center;border-radius:7px;background:var(--surface2);border:1px solid var(--line);cursor:pointer}
+.chip.new{background:var(--accent-soft);border-color:var(--accent);color:var(--ink)}
+.bar{height:8px;border-radius:99px;background:var(--surface2);border:1px solid var(--line);overflow:hidden}
+.bar > i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.ok{color:var(--good)} .no{color:var(--bad)}
+.cg{background:var(--good-soft);color:var(--good)} .cb{background:var(--bad-soft);color:var(--bad)}
+.log{display:flex;flex-direction:column;gap:6px;max-height:340px;overflow:auto}
+.logrow{display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:center;padding:6px 8px;border-radius:8px;background:var(--surface2);font-family:var(--f-mono)}
+.logrow .chars span{display:inline-block;min-width:1.25em;text-align:center;border-radius:4px;padding:0 2px;margin-right:1px}
+.logrow .typed{font-size:12px;color:var(--muted)}
+.kv{display:grid;grid-template-columns:1fr auto;gap:6px 12px;font-size:14px}
+.kv dt{color:var(--muted)} .kv dd{margin:0;font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right}
+.note{border-left:3px solid var(--accent);padding:8px 12px;background:var(--surface2);border-radius:0 8px 8px 0;font-size:14px}
+.result{padding:14px;border-radius:8px;font-weight:600}
+.result.pass{background:var(--good-soft);color:var(--good)}
+.result.fail{background:var(--mid-soft);color:var(--mid)}
+kbd{font-family:var(--f-mono);font-size:12px;padding:1px 6px;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;background:var(--surface2)}
+
+/* Übersicht */
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:800px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.tile .lab{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.tile .val{font-family:var(--f-mono);font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+.tile svg{width:100%;height:34px}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px}
+.cell{border:1px solid var(--line);border-radius:8px;padding:6px 4px 7px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;background:var(--surface2)}
+.cell b{font-family:var(--f-mono);font-size:20px}
+.cell small{font-family:var(--f-mono);font-size:11px;color:var(--muted);letter-spacing:.05em}
+.cell em{font-style:normal;font-size:11px;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.cell.locked{opacity:.38}
+.cell.fresh{border-style:dashed;border-color:var(--accent)}
+.cell.weak{background:var(--bad-soft);border-color:transparent}
+.cell.mid{background:var(--mid-soft);border-color:transparent}
+.cell.solid{background:var(--good-soft);border-color:transparent}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px;background:var(--sw)}
+.path{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:800px){.path{grid-template-columns:1fr}}
+.step{display:flex;gap:12px;padding:14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);text-decoration:none;color:var(--ink)}
+.step:hover{border-color:var(--accent)}
+.step .n{font-family:var(--f-mono);font-weight:700;color:var(--accent);font-size:13px;padding-top:2px}
+.step p{font-size:13px;color:var(--muted)}
+
+/* Reflex */
+.bigchar{font-family:var(--f-mono);font-size:96px;font-weight:700;line-height:1;text-align:center;padding:26px 0 8px;min-height:130px}
+.bigpat{font-family:var(--f-mono);text-align:center;font-size:22px;letter-spacing:.2em;color:var(--muted);min-height:32px}
+.flash-ok{color:var(--good)} .flash-no{color:var(--bad)}
+
+/* Geben */
+.decoded{font-family:var(--f-mono);font-size:22px;min-height:110px;padding:12px 14px;background:var(--surface2);border:1px solid var(--line);border-radius:8px;word-break:break-all;white-space:pre-wrap}
+.decoded .cursor{display:inline-block;width:.55em;height:1.05em;background:var(--accent);vertical-align:-3px;margin-left:2px}
+.curpat{font-family:var(--f-mono);font-size:26px;letter-spacing:.25em;min-height:36px;color:var(--accent);font-weight:700}
+.target{font-family:var(--f-mono);font-size:22px;letter-spacing:.12em}
+.target span{border-radius:4px;padding:0 1px}
+.pads{display:flex;gap:12px;user-select:none;-webkit-user-select:none;touch-action:none}
+.pad{flex:1;height:110px;border-radius:12px;border:2px solid var(--line);background:var(--surface2);display:flex;align-items:center;justify-content:center;flex-direction:column;font-weight:700;cursor:pointer;gap:4px}
+.pad small{font-weight:500;color:var(--muted);font-size:12px}
+.pad.down{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.pad.down small{color:var(--accent-ink)}
+.lamp{width:14px;height:14px;border-radius:50%;background:var(--line);display:inline-block}
+.lamp.on{background:var(--accent);box-shadow:0 0 10px var(--accent)}
+.treewrap{overflow-x:auto}
+.treewrap svg{width:100%;min-width:760px;height:auto;display:block}
+.tree line{stroke:var(--line);stroke-width:2}
+.tree line.on{stroke:var(--accent);stroke-width:3}
+.tree circle{fill:var(--surface2);stroke:var(--line);stroke-width:1.5}
+.tree g.tn{cursor:pointer}
+.tree g.tn:hover circle{stroke:var(--accent)}
+.tree text{font-family:var(--f-mono);font-size:13px;font-weight:700;fill:var(--ink);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.tree g.empty circle{fill:var(--line);stroke:none}
+.tree g.on circle{fill:var(--accent-soft);stroke:var(--accent)}
+.tree g.cur circle{fill:var(--accent);stroke:var(--accent)}
+.tree g.cur text{fill:var(--accent-ink)}
+.tree .axis{font-family:var(--f-body);font-size:12px;fill:var(--muted);font-weight:500}
+.fist .rate{font-family:var(--f-mono);font-size:11px;padding:1px 6px;border-radius:99px;margin-left:6px}
+
+/* Mitschreiben / QSO */
+.diff span{font-family:var(--f-mono);font-size:22px;padding:0 2px;border-radius:4px}
+.score{display:flex;gap:18px;flex-wrap:wrap}
+.score div{display:flex;flex-direction:column}
+.score b{font-family:var(--f-mono);font-size:22px;font-variant-numeric:tabular-nums}
+.score small{color:var(--muted);font-size:12px}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.fields input{font-family:var(--f-mono);text-transform:uppercase;font-size:18px}
+.fields input.cg,.fields input.cb{border-color:transparent}
+.transcript{font-family:var(--f-mono);font-size:14px;background:var(--surface2);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.transcript .who{color:var(--muted);font-size:12px}
+
+/* Einstellungen */
+.drawer{position:fixed;inset:0 0 0 auto;width:min(380px,100%);background:var(--surface);border-left:1px solid var(--line);padding:20px;display:flex;flex-direction:column;gap:16px;overflow:auto;transform:translateX(100%);transition:transform .2s;z-index:20;box-shadow:-10px 0 30px rgba(0,0,0,.15)}
+.drawer.open{transform:none}
+.drawer .rng{display:grid;grid-template-columns:1fr 64px;gap:8px;align-items:center}
+.drawer .rng output{font-family:var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
+.shade{position:fixed;inset:0;background:rgba(0,0,0,.25);display:none;z-index:19}
+.shade.open{display:block}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="logo" aria-hidden="true">-.-. .--</span><h1>CW-Lernstation</h1></div>
+  <div class="status">
+    <span class="pill" id="st-speed">20 WPM</span>
+    <span class="pill" id="st-farn">Farnsworth 12</span>
+    <span class="pill" id="st-tone">600 Hz</span>
+    <button class="btn" id="open-settings" type="button">Einstellungen</button>
+  </div>
+</header>
+<nav class="tabs" aria-label="Übungen">
+  <a href="#start">Übersicht</a>
+  <a href="#koch">1 · Koch-Lektion</a>
+  <a href="#reflex">2 · Zeichen-Reflex</a>
+  <a href="#hoeren">3 · Mitschreiben</a>
+  <a href="#geben">4 · Geben</a>
+  <a href="#qso">5 · QSO-Simulator</a>
+</nav>
+
+<main>
+<!-- ÜBERSICHT -->
+<section class="view" id="view-start">
+  <div class="vhead">
+    <h2>Dein Lernstand</h2>
+    <p class="muted">Lerne Morsezeichen als Klang, nicht als Punkte und Striche. Die Zeichen kommen immer im vollen Zeichentempo; die Pausen dazwischen werden gedehnt (Farnsworth), bis du schneller wirst. Alles läuft im Browser, dein Fortschritt bleibt auf diesem Gerät.</p>
+  </div>
+  <div class="tiles">
+    <div class="tile"><span class="lab">Koch-Lektion</span><span class="val" id="t-level">1</span><span class="small muted" id="t-level-sub">2 von 41 Zeichen</span></div>
+    <div class="tile"><span class="lab">Sichere Zeichen</span><span class="val" id="t-solid">0</span><span class="small muted">≥ 90 % in den letzten 20 Versuchen</span></div>
+    <div class="tile"><span class="lab">Übungszeit heute</span><span class="val" id="t-today">0 min</span><span class="small muted" id="t-week">0 min in 7 Tagen</span></div>
+    <div class="tile"><span class="lab">Letzte 7 Tage</span><svg id="t-spark" viewBox="0 0 140 34" preserveAspectRatio="none" aria-label="Übungsminuten pro Tag"></svg><span class="small muted">Minuten pro Tag</span></div>
+  </div>
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <h3>Zeichen in Koch-Reihenfolge</h3>
+      <div class="legend">
+        <span style="--sw:var(--good-soft)">sicher</span>
+        <span style="--sw:var(--mid-soft)">fast</span>
+        <span style="--sw:var(--bad-soft)">üben</span>
+        <span style="--sw:var(--surface2)">neu</span>
+        <span style="--sw:var(--line)">gesperrt</span>
+      </div>
+    </div>
+    <div class="cgrid" id="cgrid"></div>
+    <p class="small muted">Antippen spielt das Zeichen ab. Die Prozentzahl ist deine Trefferquote aus den letzten 20 Versuchen über alle Übungen.</p>
+  </div>
+  <h3>Lernpfad</h3>
+  <div class="path">
+    <a class="step" href="#koch"><span class="n">01</span><div><b>Koch-Lektion</b><p>Fünfergruppen aus den freigeschalteten Zeichen mitschreiben. Ab 90 % kommt das nächste Zeichen dazu.</p></div></a>
+    <a class="step" href="#reflex"><span class="n">02</span><div><b>Zeichen-Reflex</b><p>Ein Zeichen hören, sofort die Taste drücken. Trainiert das Erkennen ohne Nachdenken.</p></div></a>
+    <a class="step" href="#hoeren"><span class="n">03</span><div><b>Mitschreiben</b><p>Wörter, Abkürzungen, Q-Gruppen und Rufzeichen. Das Tempo passt sich an.</p></div></a>
+    <a class="step" href="#geben"><span class="n">04</span><div><b>Geben</b><p>Mit Leertaste, Strg-Tasten oder Touch-Paddles. Der Decoder zeigt, was ankommt, die Fist-Analyse misst dein Timing.</p></div></a>
+    <a class="step" href="#qso"><span class="n">05</span><div><b>QSO-Simulator</b><p>Auf einen CQ-Ruf antworten und Rufzeichen, Rapport, Name und QTH aufnehmen. Auch als Contest.</p></div></a>
+    <div class="step" style="cursor:default"><span class="n">TIP</span><div><b>15 Minuten täglich</b><p>Kurze, regelmässige Einheiten bringen mehr als eine lange am Wochenende. Zeichentempo 20 WPM oder mehr lassen.</p></div></div>
+  </div>
+</section>
+
+<!-- KOCH -->
+<section class="view" id="view-koch">
+  <div class="vhead">
+    <h2>Koch-Lektion <span id="k-lev" class="mono">1</span></h2>
+    <p class="muted">Du hörst Gruppen aus den freigeschalteten Zeichen und tippst mit, was du hörst. Unbekanntes einfach überspringen. Nach der Lektion wird bei mindestens 90 % das nächste Zeichen freigeschaltet.</p>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <div class="chips" id="k-chips"></div>
+      </div>
+      <div class="bar" aria-hidden="true"><i id="k-bar"></i></div>
+      <div class="row small muted" style="justify-content:space-between"><span id="k-prog">Gruppe 0 von 20</span><span id="k-acc">–</span></div>
+      <label class="f" for="k-input">Mitschrift der aktuellen Gruppe
+        <input id="k-input" class="big-input" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" disabled placeholder="Start drücken">
+      </label>
+      <div class="row">
+        <button class="btn primary" id="k-start" type="button">Lektion starten</button>
+        <button class="btn" id="k-replay" type="button" disabled>Gruppe wiederholen</button>
+        <button class="btn ghost" id="k-stop" type="button" disabled>Abbrechen</button>
+      </div>
+      <div id="k-result"></div>
+      <div class="log" id="k-log" aria-live="polite"></div>
+    </div>
+    <div class="card">
+      <h3>Neues Zeichen</h3>
+      <div class="row"><span class="chip new" id="k-new" style="font-size:22px;height:52px;min-width:52px">M</span><span class="mono" id="k-newpat" style="font-size:22px;letter-spacing:.2em">--</span></div>
+      <button class="btn" id="k-hearnew" type="button">Neues Zeichen 3× anhören</button>
+      <div class="row">
+        <button class="btn" id="k-down" type="button">Lektion zurück</button>
+        <button class="btn" id="k-up" type="button">Lektion vor</button>
+      </div>
+      <dl class="kv">
+        <dt>Gruppen pro Lektion</dt><dd id="k-s-groups">20</dd>
+        <dt>Zeichen pro Gruppe</dt><dd id="k-s-group">5</dd>
+        <dt>Zeichen/Effektiv</dt><dd id="k-s-speed">20/12 WPM</dd>
+      </dl>
+      <p class="note">Schwache Zeichen kommen häufiger vor. Das neueste Zeichen wird ebenfalls bevorzugt.</p>
+    </div>
+  </div>
+</section>
+
+<!-- REFLEX -->
+<section class="view" id="view-reflex">
+  <div class="vhead">
+    <h2>Zeichen-Reflex</h2>
+    <p class="muted">Ein einzelnes Zeichen erklingt, du drückst so schnell wie möglich die passende Taste. Gemessen wird ab dem Ende des Zeichens. Ziel: unter 500 ms, ohne zu zählen.</p>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="row">
+        <label class="f" for="rx-set">Zeichenvorrat
+          <select id="rx-set"><option value="koch">Freigeschaltete Koch-Zeichen</option><option value="letters">Alle Buchstaben</option><option value="all">Buchstaben, Ziffern, Satzzeichen</option></select>
+        </label>
+        <label class="f" for="rx-n">Anzahl
+          <select id="rx-n"><option>20</option><option selected>30</option><option>50</option></select>
+        </label>
+      </div>
+      <div class="bigchar" id="rx-big" aria-live="polite">·</div>
+      <div class="bigpat" id="rx-pat">Tastatur bereit halten</div>
+      <div class="bar"><i id="rx-bar"></i></div>
+      <div class="row">
+        <button class="btn primary" id="rx-start" type="button">Start</button>
+        <button class="btn ghost" id="rx-stop" type="button" disabled>Abbrechen</button>
+      </div>
+      <div id="rx-result"></div>
+    </div>
+    <div class="card">
+      <h3>Diese Runde</h3>
+      <dl class="kv">
+        <dt>Zeichen</dt><dd id="rx-k-n">0 / 30</dd>
+        <dt>Treffer</dt><dd id="rx-k-hit">–</dd>
+        <dt>Median Reaktion</dt><dd id="rx-k-med">–</dd>
+        <dt>Bestwert Median</dt><dd id="rx-k-best">–</dd>
+      </dl>
+      <h3>Langsamste Zeichen</h3>
+      <div class="chips" id="rx-slow"><span class="small muted">Noch keine Daten</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MITSCHREIBEN -->
+<section class="view" id="view-hoeren">
+  <div class="vhead">
+    <h2>Mitschreiben</h2>
+    <p class="muted">Hören, tippen, <kbd>Enter</kbd>. Ein leeres Feld mit <kbd>Enter</kbd> spielt nochmals ab. Mit Tempo-Anpassung steigt die Geschwindigkeit nach jedem Treffer um 1 WPM und sinkt bei einem Fehler.</p>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="row">
+        <label class="f" for="h-src">Übungsstoff
+          <select id="h-src">
+            <option value="abk">CW-Abkürzungen</option>
+            <option value="q">Q-Gruppen</option>
+            <option value="calls">Rufzeichen</option>
+            <option value="woerter">Deutsche Wörter</option>
+            <option value="zahlen">Zahlen und Rapporte</option>
+            <option value="eigen">Eigene Liste</option>
+          </select>
+        </label>
+        <label class="f" for="h-adapt" style="flex-direction:row;align-items:center;gap:8px;margin-top:18px"><input id="h-adapt" type="checkbox" checked> Tempo anpassen</label>
+      </div>
+      <label class="f" for="h-own" id="h-own-wrap" style="display:none">Eigene Liste (durch Leerzeichen oder Zeilen getrennt)
+        <textarea id="h-own" spellcheck="false">HB9 FUNK ANTENNE DIPOL 73 QRP</textarea>
+      </label>
+      <label class="f" for="h-input">Mitschrift
+        <input id="h-input" class="big-input" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Start drücken">
+      </label>
+      <div class="row">
+        <button class="btn primary" id="h-start" type="button">Start</button>
+        <button class="btn" id="h-replay" type="button">Nochmal hören</button>
+        <button class="btn ghost" id="h-reveal" type="button">Auflösen</button>
+      </div>
+      <div id="h-fb" aria-live="polite"></div>
+    </div>
+    <div class="card">
+      <div class="score">
+        <div><b id="h-wpm">20</b><small>WPM jetzt</small></div>
+        <div><b id="h-pts">0</b><small>Punkte</small></div>
+        <div><b id="h-streak">0</b><small>Serie</small></div>
+        <div><b id="h-rate">–</b><small>Trefferquote</small></div>
+      </div>
+      <h3>Zuletzt</h3>
+      <div class="log" id="h-log"></div>
+    </div>
+  </div>
+</section>
+
+<!-- GEBEN -->
+<section class="view" id="view-geben">
+  <div class="vhead">
+    <h2>Geben</h2>
+    <p class="muted">Handtaste: <kbd>Leertaste</kbd>. Paddle: <kbd>Strg links</kbd> oder <kbd>J</kbd> für Punkt, <kbd>Strg rechts</kbd> oder <kbd>K</kbd> für Strich. Ein echtes Paddle schliesst du über ein USB-Interface an, das diese Strg-Tasten sendet: ein vBand- oder Vail-Adapter oder ein selbstgebauter ESP32-S3. Auf dem Handy die Flächen unten antippen.</p>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="row">
+        <label class="f" for="g-mode">Taste
+          <select id="g-mode"><option value="straight">Handtaste</option><option value="A">Paddle, Iambic A</option><option value="B">Paddle, Iambic B</option></select>
+        </label>
+        <label class="f" for="g-tgt">Übungstext
+          <select id="g-tgt"><option value="none">Frei geben</option><option value="koch">Koch-Gruppe</option><option value="abk">Abkürzung</option><option value="woerter">Wort</option><option value="calls">Rufzeichen</option></select>
+        </label>
+        <button class="btn" id="g-newtgt" type="button" style="margin-top:18px">Neuer Text</button>
+        <button class="btn" id="g-heartgt" type="button" style="margin-top:18px">Vorspielen</button>
+      </div>
+      <div class="target" id="g-target" aria-live="polite"></div>
+      <div class="row" style="justify-content:space-between"><div class="row"><span class="lamp" id="g-lamp"></span><span class="curpat" id="g-pat"></span></div><span class="pill" id="g-est">– WPM</span></div>
+      <div class="decoded" id="g-out"><span class="cursor"></span></div>
+      <div class="row"><button class="btn" id="g-clear" type="button">Text löschen</button><span class="small muted" id="g-hint">Klicke einmal in die Seite, damit der Ton freigegeben wird.</span></div>
+      <div class="pads" id="g-pads"></div>
+    </div>
+    <div class="card fist">
+      <div class="row" style="justify-content:space-between"><h3>Fist-Analyse</h3><button class="btn ghost small" id="g-freset" type="button">Zurücksetzen</button></div>
+      <p class="small muted" id="g-fnote">Misst dein Handtasten-Timing im Verhältnis zur Punktlänge. Mindestens 10 Elemente geben.</p>
+      <dl class="kv" id="g-fist"></dl>
+    </div>
+  </div>
+  <div class="card">
+    <div class="row" style="justify-content:space-between"><h3>Morsebaum</h3><span class="small muted">Punkt nach links, Strich nach rechts. Knoten anklicken zum Anhören.</span></div>
+    <div class="treewrap"><svg class="tree" id="tree" viewBox="0 0 960 346" role="img" aria-label="Morsebaum"></svg></div>
+  </div>
+</section>
+
+<!-- QSO -->
+<section class="view" id="view-qso">
+  <div class="vhead">
+    <h2>QSO-Simulator</h2>
+    <p class="muted">Eine Station ruft CQ. Schreib ihr Rufzeichen mit, antworte, und nimm danach die Angaben aus ihrem Durchgang auf. Dein eigenes Rufzeichen stellst du in den Einstellungen ein.</p>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="row">
+        <label class="f" for="q-type">Art
+          <select id="q-type"><option value="rag">Normales QSO</option><option value="test">Contest</option><option value="pota">Park-Aktivierung (POTA)</option></select>
+        </label>
+        <label class="f" for="q-cut" style="flex-direction:row;align-items:center;gap:8px;margin-top:18px"><input id="q-cut" type="checkbox"> Kurzziffern (T = 0, N = 9)</label>
+      </div>
+      <div class="row"><span class="pill" id="q-phase">Bereit</span><span class="small muted" id="q-hint">Start drücken, dann zuhören.</span></div>
+      <div class="fields" id="q-fields"></div>
+      <div class="row">
+        <button class="btn primary" id="q-go" type="button">QSO starten</button>
+        <button class="btn" id="q-replay" type="button" disabled>Durchgang wiederholen</button>
+      </div>
+      <div id="q-result"></div>
+    </div>
+    <div class="card">
+      <h3>Protokoll</h3>
+      <div class="transcript" id="q-log"><span class="small muted">Hier erscheint der Verlauf, sobald ein Durchgang ausgewertet ist.</span></div>
+      <dl class="kv"><dt>QSOs</dt><dd id="q-count">0</dd><dt>Felder richtig</dt><dd id="q-rate">–</dd></dl>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="shade" id="shade"></div>
+<aside class="drawer" id="drawer" aria-label="Einstellungen">
+  <div class="row" style="justify-content:space-between"><h2>Einstellungen</h2><button class="btn" id="close-settings" type="button">Fertig</button></div>
+  <div class="f"><label for="s-wpm">Zeichentempo (WPM)</label><div class="rng"><input id="s-wpm" type="range" min="5" max="45"><output id="o-wpm"></output></div></div>
+  <div class="f"><label for="s-eff">Effektives Tempo, Farnsworth (WPM)</label><div class="rng"><input id="s-eff" type="range" min="3" max="45"><output id="o-eff"></output></div></div>
+  <div class="f"><label for="s-tone">Tonhöhe (Hz)</label><div class="rng"><input id="s-tone" type="range" min="400" max="1000" step="10"><output id="o-tone"></output></div></div>
+  <div class="f"><label for="s-vol">Lautstärke</label><div class="rng"><input id="s-vol" type="range" min="0" max="1" step="0.05"><output id="o-vol"></output></div></div>
+  <div class="row">
+    <label class="f" for="s-group">Zeichen pro Gruppe<select id="s-group"><option>3</option><option>4</option><option>5</option><option>6</option></select></label>
+    <label class="f" for="s-groups">Gruppen pro Lektion<select id="s-groups"><option>10</option><option>20</option><option>30</option><option>50</option></select></label>
+  </div>
+  <label class="f" for="s-call">Eigenes Rufzeichen<input id="s-call" type="text" maxlength="12" class="mono" style="text-transform:uppercase"></label>
+  <label class="f" for="s-side" style="flex-direction:row;align-items:center;gap:8px"><input id="s-side" type="checkbox"> Mithörton im Browser beim Geben</label>
+  <p class="small muted">Ausschalten, wenn dein Tasten-Interface selbst einen Summer hat. Der lokale Ton hat keine Verzögerung.</p>
+  <button class="btn" id="s-test" type="button">Ton testen</button>
+  <p class="note">Faustregel: Zeichentempo nicht unter 18 bis 20 WPM. Wenn das zu schnell ist, senke das effektive Tempo. So lernst du den Klang jedes Zeichens, statt Punkte zu zählen.</p>
+  <button class="btn ghost" id="s-reset" type="button">Fortschritt löschen</button>
+  <p class="small muted" id="s-reset-msg"></p>
+</aside>
+
+<script>
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const rand=a=>a[Math.floor(Math.random()*a.length)];
+const randint=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+
+/* ---------- Morse-Daten ---------- */
+const MORSE={A:'.-',B:'-...',C:'-.-.',D:'-..',E:'.',F:'..-.',G:'--.',H:'....',I:'..',J:'.---',K:'-.-',L:'.-..',M:'--',N:'-.',O:'---',P:'.--.',Q:'--.-',R:'.-.',S:'...',T:'-',U:'..-',V:'...-',W:'.--',X:'-..-',Y:'-.--',Z:'--..',
+'0':'-----','1':'.----','2':'..---','3':'...--','4':'....-','5':'.....','6':'-....','7':'--...','8':'---..','9':'----.',
+'.':'.-.-.-',',':'--..--','?':'..--..','/':'-..-.','=':'-...-','+':'.-.-.','-':'-....-','@':'.--.-.'};
+const PROS={'<AR>':'.-.-.','<SK>':'...-.-','<BT>':'-...-','<KN>':'-.--.'};
+const REV={}; for(const [k,v] of Object.entries(MORSE)) REV[v]=k; REV['...-.-']='<SK>'; REV['-.--.']='<KN>';
+const KOCH='KMURESNAPTLWI.JZ=FOY,VG5/Q92H38B?47C1D60X'.split('');
+const LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+const ALLCH=Object.keys(MORSE);
+const pat=u=>PROS[u]||MORSE[u]||'';
+const pretty=p=>p.replace(/\./g,'·').replace(/-/g,'–');
+function tokenize(t){return (t.toUpperCase().match(/<[A-Z]{2}>|\s+|./g)||[]).map(u=>/^\s+$/.test(u)?' ':u);}
+
+const DE_WORDS='FUNK WELLE ANTENNE SENDER EMPFANG TASTE MORSE KURZ LANG BERG TAL SEE HAUS BAUM WALD WIND REGEN SONNE MOND STERN NACHT TAG ABEND MORGEN ZEIT JAHR WOCHE HEUTE GUT SCHNELL LEISE LAUT HALLO DANKE BITTE GRUSS FREUND NAME STADT LAND ZUG BAHN BRIEF KARTE ZAHL WORT SATZ BAND DRAHT MAST ERDE STROM QUARZ SPULE RELAIS KABEL STECKER KAFFEE BROT MILCH VIER SIEBEN ZEHN OBEN UNTEN LINKS RECHTS KLAR JA NEIN ODER UND MIT OHNE AUCH NOCH SCHON IMMER WETTER DIPOL'.split(' ');
+const ABK={CQ:'allgemeiner Anruf',DE:'von',K:'bitte kommen',TNX:'danke',TU:'danke',FB:'sehr gut',OM:'Funker',YL:'Funkerin',UR:'dein, deine',HR:'hier',WX:'Wetter',ANT:'Antenne',RIG:'Funkgerät',PWR:'Sendeleistung',HW:'wie hörst du mich?',CPY:'mitschreiben, aufnehmen',AGN:'nochmals',PSE:'bitte',ES:'und',GM:'guten Morgen',GA:'guten Tag',GE:'guten Abend',GN:'gute Nacht',DR:'liebe, lieber',CUL:'bis später',BK:'Gegenschreiben, Übergabe',SRI:'Entschuldigung',NR:'Nummer',FER:'für',WID:'mit',73:'beste Grüsse',88:'Liebe und Küsse',RST:'Rapport: Lesbarkeit, Stärke, Ton',OP:'Operator',ABT:'ungefähr',GL:'viel Glück',HPE:'hoffe',VY:'sehr',WKD:'gearbeitet',TEST:'Contest-Anruf','5NN':'599 in Kurzziffern',AR:'Ende der Nachricht',SK:'Ende der Verbindung'};
+const QC={QTH:'Standort',QRZ:'Wer ruft mich?',QSL:'Empfang bestätigt',QRM:'Störung durch andere Stationen',QRN:'atmosphärische Störungen',QSB:'Schwund, Fading',QRS:'langsamer geben',QRQ:'schneller geben',QRP:'kleine Leistung',QRO:'Leistung erhöhen',QSY:'Frequenz wechseln',QRT:'Sendebetrieb einstellen',QRV:'bereit',QSO:'Funkverbindung',QRL:'Ist die Frequenz belegt?',QRX:'bitte warten',QSK:'Mithören zwischen den Zeichen',QRG:'genaue Frequenz',QRU:'nichts für dich',QSP:'Nachricht weiterleiten'};
+const COUNTRIES=[
+ {p:['HB9','HB3'],q:['BERN','ZUERICH','BASEL','LUZERN','CHUR','THUN','AARAU','WINTERTHUR']},
+ {p:['DL','DK','DJ','DO','DF'],q:['BERLIN','HAMBURG','MUENCHEN','KOELN','DRESDEN','ULM','KIEL','BONN']},
+ {p:['OE'],q:['WIEN','GRAZ','LINZ','INNSBRUCK','SALZBURG']},
+ {p:['F'],q:['LYON','PARIS','NANTES','LILLE']},
+ {p:['G','M','2E'],q:['LONDON','YORK','LEEDS','BATH']},
+ {p:['I','IK','IZ'],q:['MILANO','ROMA','TORINO','COMO']},
+ {p:['PA','PD'],q:['DELFT','UTRECHT','LEIDEN']},
+ {p:['OK','OL'],q:['PRAHA','BRNO','PLZEN']},
+ {p:['SP','SQ'],q:['KRAKOW','GDANSK','POZNAN']},
+ {p:['ON'],q:['GENT','LIEGE','BRUGGE']},
+ {p:['EA'],q:['MADRID','SEVILLA','VALENCIA']},
+ {p:['OH'],q:['TURKU','OULU']},
+ {p:['K','W','N','KD','AA'],q:['DENVER','BOSTON','DALLAS','OMAHA','RENO']},
+ {p:['VE','VA'],q:['TORONTO','OTTAWA']},
+ {p:['JA','JH'],q:['TOKYO','OSAKA']}];
+const NAMES='KLAUS ANNA PETER MARIA HANS EVA MARCO LUCA JEAN PAUL TOM SUSI BEAT URS RETO KARL INGE JOE BOB NINA LEA FRITZ OTTO SVEN'.split(' ');
+
+function genCallInfo(){
+  const C=Math.random()<.35?COUNTRIES[0]:rand(COUNTRIES);
+  let p=rand(C.p); if(!/\d$/.test(p)) p+=randint(0,9);
+  const L='ABCDEFGHIJKLMNOPQRSTUVWXYZ'; const n=Math.random()<.15?1:(Math.random()<.5?2:3);
+  let s=''; for(let i=0;i<n;i++) s+=L[randint(0,25)];
+  return {call:p+s,qth:rand(C.q)};
+}
+
+/* ---------- Speicher ---------- */
+const DEF={wpm:20,eff:12,tone:600,vol:.6,level:1,group:5,groups:20,call:'HB9XYZ',sideBrowser:true};
+function load(k,d){try{const v=JSON.parse(localStorage.getItem(k)); return v?Object.assign(JSON.parse(JSON.stringify(d)),v):JSON.parse(JSON.stringify(d));}catch(e){return JSON.parse(JSON.stringify(d));}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+let S=load('cwl.settings',DEF);
+let P=load('cwl.progress',{chars:{},days:{},reflexBest:null,qso:{n:0,ok:0,tot:0}});
+const persist=()=>save('cwl.progress',P);
+const saveS=()=>save('cwl.settings',S);
+function today(d=new Date()){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function addTime(sec){if(!(sec>0))return; const d=today(); P.days[d]=(P.days[d]||0)+Math.min(sec,40);}
+function rec(ch,ok,rt){
+  if(!MORSE[ch]) return;
+  const c=P.chars[ch]||(P.chars[ch]={h:[],rt:[]});
+  c.h.push(ok?1:0); if(c.h.length>20) c.h.shift();
+  if(ok&&rt!=null){c.rt.push(Math.round(rt)); if(c.rt.length>10) c.rt.shift();}
+}
+function acc(ch){const c=P.chars[ch]; if(!c||!c.h.length) return null; return c.h.reduce((a,b)=>a+b,0)/c.h.length;}
+const kochSet=()=>KOCH.slice(0,Math.max(2,S.level+1));
+function pickChar(set){
+  const newest=set[set.length-1];
+  const w=set.map(ch=>{const a=acc(ch); let x=a===null?2:1+(1-a)*4; if(ch===newest&&set===kochSetCache) x*=1.6; return x;});
+  let r=Math.random()*w.reduce((a,b)=>a+b,0);
+  for(let i=0;i<set.length;i++){r-=w[i]; if(r<=0) return set[i];}
+  return set[set.length-1];
+}
+let kochSetCache=null;
+
+/* ---------- Audio ---------- */
+let ctx=null, master=null, side=null, playing=null;
+function ac(){
+  if(!ctx){const A=window.AudioContext||window.webkitAudioContext; ctx=new A(); master=ctx.createGain(); master.gain.value=S.vol; master.connect(ctx.destination);}
+  if(ctx.state==='suspended') ctx.resume();
+  return ctx;
+}
+function timing(wpm,eff){
+  const dit=1.2/wpm; let cg=3*dit, wg=7*dit;
+  if(eff<wpm){const ta=(60*wpm-37.2*eff)/(eff*wpm); cg=3*ta/19; wg=7*ta/19;}
+  return {dit,cg,wg};
+}
+function stopAudio(){
+  if(playing){
+    const p=playing; playing=null; clearTimeout(p.timer);
+    try{const t=ctx.currentTime; p.g.gain.cancelScheduledValues(t); p.g.gain.setValueAtTime(0,t); p.osc.stop(t+.01);}catch(e){}
+    p.res(false);
+  }
+}
+function play(text,opt={}){
+  stopAudio();
+  const c=ac(); const wpm=opt.wpm||S.wpm; const eff=Math.min(opt.eff||S.eff,wpm);
+  const t=timing(wpm,eff);
+  const osc=c.createOscillator(); osc.frequency.value=S.tone; osc.type='sine';
+  const g=c.createGain(); g.gain.value=0; osc.connect(g); g.connect(master);
+  const start=c.currentTime+.06; let time=start; const ramp=.005; let first=true;
+  for(const u of tokenize(text)){
+    if(u===' '){ if(!first) time+=t.wg-t.cg; continue; }
+    const p=pat(u); if(!p) continue; first=false;
+    for(let j=0;j<p.length;j++){
+      const d=p[j]==='.'?t.dit:3*t.dit;
+      g.gain.setValueAtTime(0,time); g.gain.linearRampToValueAtTime(1,time+ramp);
+      g.gain.setValueAtTime(1,time+d-ramp); g.gain.linearRampToValueAtTime(0,time+d);
+      time+=d; if(j<p.length-1) time+=t.dit;
+    }
+    time+=t.cg;
+  }
+  const end=time-t.cg+.02;
+  osc.start(start); osc.stop(end+.05);
+  return new Promise(res=>{
+    const me={osc,g,res,timer:0};
+    me.timer=setTimeout(()=>{ if(playing===me){playing=null;} res(true); },(end-c.currentTime)*1000);
+    playing=me;
+  });
+}
+function sideOn(){
+  if(!S.sideBrowser) return;
+  const c=ac();
+  if(!side){const o=c.createOscillator(); const g=c.createGain(); g.gain.value=0; o.connect(g); g.connect(master); o.start(); side={o,g};}
+  side.o.frequency.value=S.tone; const t=c.currentTime;
+  side.g.gain.cancelScheduledValues(t); side.g.gain.setTargetAtTime(1,t,.0025);
+}
+function sideOff(){ if(!side) return; const t=ctx.currentTime; side.g.gain.cancelScheduledValues(t); side.g.gain.setTargetAtTime(0,t,.0025); }
+
+/* ---------- Einstellungen ---------- */
+function refreshStatus(){
+  $('#st-speed').textContent=S.wpm+' WPM';
+  $('#st-farn').textContent=S.eff<S.wpm?'Farnsworth '+S.eff:'ohne Farnsworth';
+  $('#st-tone').textContent=S.tone+' Hz';
+  $('#k-s-groups').textContent=S.groups; $('#k-s-group').textContent=S.group;
+  $('#k-s-speed').textContent=S.wpm+'/'+S.eff+' WPM';
+  if(master) master.gain.value=S.vol;
+}
+function bindSettings(){
+  const r=(id,key,fmt)=>{const el=$('#s-'+id), o=$('#o-'+id); el.value=S[key]; o.textContent=fmt(S[key]);
+    el.addEventListener('input',()=>{S[key]=Number(el.value);
+      if(key==='wpm'&&S.eff>S.wpm){S.eff=S.wpm; $('#s-eff').value=S.eff; $('#o-eff').textContent=S.eff;}
+      if(key==='eff'&&S.eff>S.wpm){S.eff=S.wpm; el.value=S.eff;}
+      o.textContent=fmt(S[key]); saveS(); refreshStatus();});};
+  r('wpm','wpm',v=>v); r('eff','eff',v=>v); r('tone','tone',v=>v); r('vol','vol',v=>Math.round(v*100)+' %');
+  for(const k of ['group','groups']){const el=$('#s-'+k); el.value=S[k]; el.addEventListener('change',()=>{S[k]=Number(el.value); saveS(); refreshStatus();});}
+  const c=$('#s-call'); c.value=S.call; c.addEventListener('input',()=>{S.call=c.value.toUpperCase().replace(/[^A-Z0-9/]/g,'')||'HB9XYZ'; saveS();});
+  const sd=$('#s-side'); sd.checked=S.sideBrowser; sd.onchange=()=>{S.sideBrowser=sd.checked; saveS(); if(!sd.checked) sideOff();};
+  $('#s-test').onclick=()=>play('VVV');
+  let armed=false;
+  $('#s-reset').onclick=()=>{ if(!armed){armed=true; $('#s-reset').textContent='Wirklich löschen?'; $('#s-reset-msg').textContent='Nochmals klicken, um Statistik, Lektion und Zeiten zu löschen.'; return;}
+    P={chars:{},days:{},reflexBest:null,qso:{n:0,ok:0,tot:0}}; S.level=1; persist(); saveS(); armed=false; $('#s-reset').textContent='Fortschritt löschen'; $('#s-reset-msg').textContent='Fortschritt gelöscht.'; renderAll(); };
+  const open=v=>{$('#drawer').classList.toggle('open',v); $('#shade').classList.toggle('open',v);};
+  $('#open-settings').onclick=()=>open(true); $('#close-settings').onclick=()=>open(false); $('#shade').onclick=()=>open(false);
+}
+
+/* ---------- Routing ---------- */
+const VIEWS=['start','koch','reflex','hoeren','geben','qso'];
+let view='start';
+function route(){
+  const h=location.hash.slice(1); const v=VIEWS.includes(h)?h:'start';
+  if(v!==view){stopAll();}
+  view=v;
+  $$('.view').forEach(s=>s.classList.toggle('on',s.id==='view-'+v));
+  $$('nav.tabs a').forEach(a=>{ if(a.getAttribute('href')==='#'+v) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+  if(v==='start') renderStart();
+  if(v==='koch') renderKoch();
+}
+function stopAll(){ stopAudio(); kochAbort(); rxAbort(); sideOff(); }
+
+/* ---------- Übersicht ---------- */
+function renderStart(){
+  const set=kochSet();
+  $('#t-level').textContent=S.level+' / '+(KOCH.length-1);
+  $('#t-level-sub').textContent=set.length+' von '+KOCH.length+' Zeichen';
+  $('#t-solid').textContent=ALLCH.filter(ch=>{const c=P.chars[ch]; return c&&c.h.length>=10&&acc(ch)>=.9;}).length;
+  const days=[]; for(let i=6;i>=0;i--){const d=new Date(); d.setDate(d.getDate()-i); days.push(Math.round((P.days[today(d)]||0)/60));}
+  $('#t-today').textContent=days[6]+' min';
+  $('#t-week').textContent=days.reduce((a,b)=>a+b,0)+' min in 7 Tagen';
+  const mx=Math.max(5,...days); let s='';
+  days.forEach((m,i)=>{const h=Math.max(1.5,(m/mx)*30); s+=`<rect x="${i*20+2}" y="${32-h}" width="15" height="${h}" rx="2" fill="${i===6?'var(--accent)':'var(--line)'}"><title>${m} min</title></rect>`;});
+  $('#t-spark').innerHTML=s;
+  const g=$('#cgrid'); g.innerHTML='';
+  KOCH.forEach((ch,i)=>{
+    const a=acc(ch), c=P.chars[ch]; const unlocked=i<set.length;
+    let cls='cell'; if(!unlocked&&!c) cls+=' locked'; else if(a===null) cls+=' fresh'; else if(c.h.length>=5&&a>=.9) cls+=' solid'; else if(a>=.7) cls+=' mid'; else cls+=' weak';
+    const el=document.createElement('button'); el.type='button'; el.className=cls;
+    el.innerHTML=`<b>${esc(ch)}</b><small>${pretty(MORSE[ch])}</small><em>${a===null?(unlocked?'neu':'–'):Math.round(a*100)+' %'}</em>`;
+    el.setAttribute('aria-label',ch+(a===null?'':', '+Math.round(a*100)+' Prozent'));
+    el.onclick=()=>play(ch); g.appendChild(el);
+  });
+}
+
+/* ---------- Koch ---------- */
+const KS={run:false,i:0,cur:'',res:[],t0:0,checking:false,token:0};
+function renderKoch(){
+  const set=kochSet(); kochSetCache=set;
+  $('#k-lev').textContent=S.level;
+  const ch=$('#k-chips'); ch.innerHTML='';
+  set.forEach((c,i)=>{const b=document.createElement('button'); b.type='button'; b.className='chip'+(i===set.length-1?' new':''); b.textContent=c; b.title=pretty(MORSE[c]); b.onclick=()=>play(c); ch.appendChild(b);});
+  const nw=set[set.length-1]; $('#k-new').textContent=nw; $('#k-newpat').textContent=pretty(MORSE[nw]);
+  $('#k-down').disabled=S.level<=1; $('#k-up').disabled=S.level>=KOCH.length-1;
+}
+function kochUI(run){ $('#k-start').disabled=run; $('#k-replay').disabled=!run; $('#k-stop').disabled=!run; $('#k-input').disabled=!run; $('#k-down').disabled=run||S.level<=1; $('#k-up').disabled=run||S.level>=KOCH.length-1; }
+function kochStart(){
+  kochSetCache=kochSet(); KS.run=true; KS.i=0; KS.res=[]; $('#k-log').innerHTML=''; $('#k-result').innerHTML='';
+  kochUI(true); $('#k-input').placeholder=''; kochNext();
+}
+function kochAbort(){ if(!KS.run) return; KS.run=false; KS.token++; kochUI(false); $('#k-input').placeholder='Start drücken'; persist(); }
+async function kochNext(){
+  if(!KS.run) return;
+  if(KS.i>=S.groups) return kochFinish();
+  let g=''; for(let j=0;j<S.group;j++) g+=pickChar(kochSetCache);
+  KS.cur=g; KS.i++; KS.checking=false;
+  $('#k-prog').textContent=`Gruppe ${KS.i} von ${S.groups}`; $('#k-bar').style.width=((KS.i-1)/S.groups*100)+'%';
+  const inp=$('#k-input'); inp.value=''; inp.focus(); KS.t0=performance.now();
+  await play(g);
+}
+function kochCheck(){
+  if(!KS.run||KS.checking) return; KS.checking=true;
+  const typed=$('#k-input').value.toUpperCase().replace(/\s/g,''); const cur=KS.cur;
+  let ok=0, html='';
+  for(let j=0;j<cur.length;j++){const good=typed[j]===cur[j]; rec(cur[j],good); if(good) ok++; html+=`<span class="${good?'cg':'cb'}">${esc(cur[j])}</span>`;}
+  KS.res.push(ok/cur.length); addTime((performance.now()-KS.t0)/1000); persist();
+  const total=KS.res.reduce((a,b)=>a+b,0)/KS.res.length; $('#k-acc').textContent=Math.round(total*100)+' % richtig';
+  const row=document.createElement('div'); row.className='logrow';
+  row.innerHTML=`<span class="small muted">${KS.i}</span><div><div class="chars">${html}</div><div class="typed">du: ${esc(typed||'(leer)')}</div></div><button class="btn ghost small" type="button">▶</button>`;
+  row.querySelector('button').onclick=()=>play(cur);
+  $('#k-log').prepend(row);
+  stopAudio();
+  const tk=KS.token; setTimeout(()=>{ if(tk===KS.token) kochNext(); },650);
+}
+function kochFinish(){
+  KS.run=false; kochUI(false); $('#k-bar').style.width='100%';
+  const total=KS.res.reduce((a,b)=>a+b,0)/KS.res.length; const pct=Math.round(total*100);
+  let msg;
+  if(total>=.9&&S.level<KOCH.length-1){S.level++; saveS(); msg=`<div class="result pass">${pct} % richtig. Lektion bestanden, neu dabei: <span class="mono">${esc(KOCH[S.level])}</span> (${pretty(MORSE[KOCH[S.level]])}).</div>`;}
+  else if(total>=.9){msg=`<div class="result pass">${pct} % richtig. Du kennst alle Koch-Zeichen. Weiter mit Mitschreiben und QSO.</div>`;}
+  else msg=`<div class="result fail">${pct} % richtig. Für die nächste Lektion braucht es 90 %. Nochmals, die schwachen Zeichen kommen jetzt häufiger.</div>`;
+  $('#k-result').innerHTML=msg; $('#k-input').placeholder='Start drücken'; persist(); renderKoch();
+}
+
+/* ---------- Reflex ---------- */
+const RX={run:false,n:0,total:30,cur:'',tEnd:0,wait:false,hits:0,rts:[],to:0,token:0,per:{}};
+function rxSet(){const v=$('#rx-set').value; return v==='koch'?kochSet():v==='letters'?LETTERS:ALLCH;}
+function rxStart(){ RX.run=true; RX.n=0; RX.hits=0; RX.rts=[]; RX.per={}; RX.total=Number($('#rx-n').value); kochSetCache=null; $('#rx-start').disabled=true; $('#rx-stop').disabled=false; $('#rx-result').innerHTML=''; rxStats(); setTimeout(rxNext,400); }
+function rxAbort(){ if(!RX.run) return; RX.run=false; RX.wait=false; RX.token++; clearTimeout(RX.to); $('#rx-start').disabled=false; $('#rx-stop').disabled=true; persist(); }
+async function rxNext(){
+  if(!RX.run) return;
+  if(RX.n>=RX.total) return rxFinish();
+  RX.n++; RX.cur=pickChar(rxSet()); const tk=++RX.token;
+  $('#rx-big').textContent='?'; $('#rx-big').className='bigchar'; $('#rx-pat').textContent=' ';
+  $('#rx-bar').style.width=((RX.n-1)/RX.total*100)+'%';
+  RX.tEnd=0; RX.wait=true;
+  const done=await play(RX.cur);
+  if(tk!==RX.token||!RX.wait) return;
+  if(done){RX.tEnd=performance.now(); RX.to=setTimeout(()=>{ if(tk===RX.token&&RX.wait) rxAnswer(null); },3000);}
+}
+function rxAnswer(k){
+  if(!RX.wait) return; RX.wait=false; clearTimeout(RX.to);
+  const rt=RX.tEnd?performance.now()-RX.tEnd:0; const ok=k===RX.cur;
+  if(!RX.tEnd) stopAudio();
+  rec(RX.cur,ok,ok?rt:null); addTime(1.5+rt/1000);
+  const tk=++RX.token;
+  $('#rx-big').textContent=RX.cur; $('#rx-pat').textContent=pretty(MORSE[RX.cur]);
+  if(ok){ RX.hits++; RX.rts.push(rt); (RX.per[RX.cur]=RX.per[RX.cur]||[]).push(rt); $('#rx-big').className='bigchar flash-ok'; $('#rx-pat').textContent=Math.round(rt)+' ms'; rxStats(); setTimeout(()=>{if(tk===RX.token) rxNext();},450); }
+  else{ (RX.per[RX.cur]=RX.per[RX.cur]||[]).push(3000); $('#rx-big').className='bigchar flash-no'; $('#rx-pat').textContent=pretty(MORSE[RX.cur])+(k?'   du: '+k:'   zu langsam'); rxStats();
+    setTimeout(()=>{ if(tk!==RX.token) return; play(RX.cur).then(()=>setTimeout(()=>{if(tk===RX.token) rxNext();},700)); },350); }
+}
+const median=a=>{if(!a.length) return null; const s=[...a].sort((x,y)=>x-y); const m=s.length>>1; return s.length%2?s[m]:(s[m-1]+s[m])/2;};
+function rxStats(){
+  $('#rx-k-n').textContent=RX.n+' / '+RX.total;
+  $('#rx-k-hit').textContent=RX.n?Math.round(RX.hits/Math.max(1,RX.n-(RX.wait?1:0))*100)+' %':'–';
+  const m=median(RX.rts); $('#rx-k-med').textContent=m==null?'–':Math.round(m)+' ms';
+  $('#rx-k-best').textContent=P.reflexBest?P.reflexBest+' ms':'–';
+  const slow=Object.entries(RX.per).map(([c,a])=>[c,median(a)]).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const el=$('#rx-slow'); if(!slow.length){el.innerHTML='<span class="small muted">Noch keine Daten</span>'; return;}
+  el.innerHTML=''; slow.forEach(([c,m])=>{const b=document.createElement('button'); b.type='button'; b.className='chip'; b.innerHTML=`${esc(c)}&nbsp;<span class="small muted">${m>=3000?'✗':Math.round(m)}</span>`; b.onclick=()=>play(c); el.appendChild(b);});
+}
+function rxFinish(){
+  RX.run=false; $('#rx-start').disabled=false; $('#rx-stop').disabled=true; $('#rx-bar').style.width='100%';
+  const m=median(RX.rts); const pct=Math.round(RX.hits/RX.total*100);
+  let best=false; if(m!=null&&pct>=80&&(!P.reflexBest||m<P.reflexBest)){P.reflexBest=Math.round(m); best=true;}
+  persist(); rxStats();
+  $('#rx-result').innerHTML=`<div class="result ${pct>=90?'pass':'fail'}">${pct} % Treffer, Median ${m==null?'–':Math.round(m)+' ms'}.${best?' Neuer Bestwert.':''}</div>`;
+  $('#rx-big').textContent='·'; $('#rx-big').className='bigchar'; $('#rx-pat').textContent='Runde beendet';
+}
+
+/* ---------- Mitschreiben ---------- */
+const HS={cur:null,checked:true,streak:0,pts:0,n:0,ok:0,wpm:null,t0:0,started:false};
+function genItem(src){
+  if(src==='woerter') return {text:rand(DE_WORDS)};
+  if(src==='abk'){const k=rand(Object.keys(ABK)); return {text:String(k),info:ABK[k]};}
+  if(src==='q'){const k=rand(Object.keys(QC)); const ask=Math.random()<.25&&k!=='QRZ'&&k!=='QRL'; return {text:k+(ask?'?':''),info:QC[k]+(ask?' (als Frage)':'')};}
+  if(src==='calls'){const c=genCallInfo().call; return {text:c+(Math.random()<.1?'/P':'')};}
+  if(src==='zahlen'){const r=Math.random(); if(r<.3) return {text:rand(['599','579','559','589','569','449','339']),info:'RST-Rapport'}; if(r<.55) return {text:'5NN '+String(randint(1,999)).padStart(3,'0'),info:'Contest-Rapport mit Seriennummer'}; if(r<.8) return {text:String(randint(10,9999))}; return {text:String(randint(1,9))+'0'+String(randint(0,9))+' W',info:'Leistung in Watt'};}
+  const own=$('#h-own').value.toUpperCase().split(/\s+/).filter(w=>w&&[...w].every(c=>MORSE[c]));
+  return {text:own.length?rand(own):'LEER'};
+}
+const norm=s=>s.toUpperCase().replace(/\s+/g,' ').trim();
+function hWpm(){ if(HS.wpm==null) HS.wpm=S.wpm; return HS.wpm; }
+function hPlay(){ const w=hWpm(); return play(HS.cur.text,{wpm:w,eff:Math.max(3,Math.round(w*S.eff/S.wpm))}); }
+function hNext(){
+  HS.cur=genItem($('#h-src').value); HS.checked=false; HS.started=true;
+  const i=$('#h-input'); i.value=''; i.placeholder=''; i.focus(); $('#h-fb').innerHTML=''; HS.t0=performance.now(); hPlay(); hScore();
+}
+function hCheck(reveal){
+  if(!HS.cur||HS.checked) return;
+  const typed=norm($('#h-input').value); const exp=norm(HS.cur.text);
+  if(!typed&&!reveal){ hPlay(); return; }
+  HS.checked=true; HS.n++;
+  const ok=!reveal&&typed===exp; const w=hWpm();
+  let html=''; for(let j=0;j<exp.length;j++){ if(exp[j]===' '){html+=' '; continue;} const g=typed[j]===exp[j]; rec(exp[j],g&&!reveal); html+=`<span class="${g&&!reveal?'cg':'cb'}">${esc(exp[j])}</span>`; }
+  if(ok){HS.ok++; HS.streak++; HS.pts+=Math.round(exp.replace(/ /g,'').length*w/5); if($('#h-adapt').checked) HS.wpm=Math.min(60,w+1);}
+  else{HS.streak=0; if($('#h-adapt').checked&&!reveal) HS.wpm=Math.max(5,w-1);}
+  addTime((performance.now()-HS.t0)/1000); persist();
+  $('#h-fb').innerHTML=`<div class="diff">${html}</div>${typed&&!ok?`<p class="small muted">du: <span class="mono">${esc(typed)}</span></p>`:''}${HS.cur.info?`<p class="note">${esc(HS.cur.text)} = ${esc(HS.cur.info)}</p>`:''}<p class="small muted"><kbd>Enter</kbd> für das nächste</p>`;
+  const row=document.createElement('div'); row.className='logrow'; const t=HS.cur.text;
+  row.innerHTML=`<span class="${ok?'ok':'no'}">${ok?'✓':'✗'}</span><span>${esc(t)}</span><span class="small muted">${w}</span>`;
+  row.title='Anklicken zum Anhören'; row.style.cursor='pointer'; row.onclick=()=>play(t,{wpm:w,eff:Math.max(3,Math.round(w*S.eff/S.wpm))});
+  $('#h-log').prepend(row); while($('#h-log').children.length>25) $('#h-log').lastChild.remove();
+  hScore();
+}
+function hScore(){ $('#h-wpm').textContent=hWpm(); $('#h-pts').textContent=HS.pts; $('#h-streak').textContent=HS.streak; $('#h-rate').textContent=HS.n?Math.round(HS.ok/HS.n*100)+' %':'–'; }
+
+/* ---------- Geben: Decoder, Keyer, Baum, Fist ---------- */
+const GS={text:'',target:'',};
+const DEC={dit:60,pat:'',lastUp:0,downAt:0,timer:0,wtimer:0,keyDown:false,clearT:0};
+const F={dit:[],dah:[],intra:[],cgap:[]};
+const push=(a,v)=>{a.push(v); if(a.length>80) a.shift();};
+function gMode(){return $('#g-mode').value;}
+function ditMs(){return 1200/S.wpm;}
+function markStart(t){
+  clearTimeout(DEC.timer); clearTimeout(DEC.wtimer); clearTimeout(DEC.clearT);
+  if(DEC.lastUp&&gMode()==='straight'){ const gap=t-DEC.lastUp; if(DEC.pat) push(F.intra,gap); else if(gap<6*DEC.dit) push(F.cgap,gap); }
+  DEC.downAt=t; DEC.keyDown=true; sideOn(); $('#g-lamp').classList.add('on');
+}
+function markEnd(t,known){
+  if(!DEC.keyDown) return; DEC.keyDown=false; sideOff(); $('#g-lamp').classList.remove('on');
+  const d=t-DEC.downAt; let el;
+  if(known){ el=known; DEC.dit=ditMs(); }
+  else{
+    if(d<12) return;
+    el=d<2*DEC.dit?'.':'-';
+    if(el==='.'){DEC.dit=.75*DEC.dit+.25*d; push(F.dit,d);} else {DEC.dit=.75*DEC.dit+.25*(d/3); push(F.dah,d);}
+    DEC.dit=Math.min(400,Math.max(25,DEC.dit));
+    fistRender();
+  }
+  DEC.pat+=el; DEC.lastUp=t;
+  $('#g-pat').textContent=pretty(DEC.pat); treeShow(DEC.pat);
+  $('#g-est').textContent=Math.round(1200/DEC.dit)+' WPM';
+  DEC.timer=setTimeout(endChar,2.5*DEC.dit);
+}
+function endChar(){
+  const p=DEC.pat; DEC.pat=''; if(!p) return;
+  const ch=REV[p]||'*'; emit(ch);
+  if(MORSE[ch]&&GS.target){/* Statistik nur bei Übungstext, siehe compare */}
+  treeShow(p,true); DEC.clearT=setTimeout(()=>{treeShow(''); $('#g-pat').textContent='';},700);
+  DEC.wtimer=setTimeout(()=>{ if(GS.text&&!GS.text.endsWith(' ')) emit(' '); },2.5*DEC.dit);
+}
+function emit(s){ GS.text+=s; if(GS.text.length>400) GS.text=GS.text.slice(-400); renderOut(); }
+function renderOut(){
+  $('#g-out').innerHTML=esc(GS.text)+'<span class="cursor"></span>';
+  if(GS.target){
+    const sent=GS.text.replace(/\s/g,''); const tg=GS.target.replace(/\s/g,'');
+    let html='', k=0;
+    for(const c of GS.target){ if(c===' '){html+=' '; continue;} const s=sent[k]; html+=`<span class="${s==null?'':(s===c?'cg':'cb')}">${esc(c)}</span>`; k++; }
+    $('#g-target').innerHTML=html;
+    if(sent.length>=tg.length&&!GS.done){ GS.done=true; let ok=0; for(let j=0;j<tg.length;j++) if(sent[j]===tg[j]) ok++;
+      $('#g-target').innerHTML+=` <span class="small ${ok===tg.length?'ok':'no'}" style="font-family:var(--f-body);letter-spacing:0">${ok===tg.length?'fehlerfrei':ok+' von '+tg.length+' richtig'}</span>`; addTime(10); persist(); }
+  }
+}
+function newTarget(){
+  const v=$('#g-tgt').value; GS.done=false;
+  if(v==='none'){GS.target=''; $('#g-target').innerHTML='<span class="small muted" style="font-family:var(--f-body);letter-spacing:0">Gib, was du willst. Der Decoder schreibt mit.</span>'; return;}
+  if(v==='koch'){let g=''; const set=kochSet(); for(let i=0;i<5;i++) g+=rand(set); GS.target=g;}
+  else GS.target=genItem(v).text.replace('/P','');
+  GS.text=''; renderOut();
+}
+/* Iambic-Keyer */
+const KY={dit:false,dah:false,busy:false,memDit:false,memDah:false,last:null,cur:null,squeeze:false};
+function paddle(which,down){
+  if(KY[which]===down) return; KY[which]=down;
+  padVis();
+  if(down){
+    if(KY.busy){ if(which==='dit'&&KY.cur==='-') KY.memDit=true; if(which==='dah'&&KY.cur==='.') KY.memDah=true; }
+    else keyerNext();
+  }
+  if(KY.dit&&KY.dah&&KY.busy) KY.squeeze=true;
+}
+function keyerNext(){
+  const wantDit=KY.dit||KY.memDit, wantDah=KY.dah||KY.memDah; let el=null;
+  if(wantDit&&wantDah) el=KY.last==='.'?'-':'.'; else if(wantDit) el='.'; else if(wantDah) el='-';
+  KY.memDit=KY.memDah=false;
+  if(!el){KY.busy=false; KY.last=null; return;}
+  KY.busy=true; KY.cur=el; KY.last=el; KY.squeeze=KY.dit&&KY.dah;
+  const dit=ditMs(), d=el==='.'?dit:3*dit;
+  markStart(performance.now());
+  setTimeout(()=>{
+    markEnd(performance.now(),el);
+    if(gMode()==='B'&&KY.squeeze&&!(KY.dit&&KY.dah)){ if(el==='.') KY.memDah=true; else KY.memDit=true; }
+    KY.cur=null;
+    setTimeout(keyerNext,dit);
+  },d);
+}
+function straight(down){ if(down) markStart(performance.now()); else markEnd(performance.now()); padVis(down); }
+function padVis(sd){
+  const m=gMode();
+  if(m==='straight'){const p=$('#pad-s'); if(p) p.classList.toggle('down',!!sd);}
+  else{const a=$('#pad-dit'), b=$('#pad-dah'); if(a) a.classList.toggle('down',KY.dit); if(b) b.classList.toggle('down',KY.dah);}
+}
+function buildPads(){
+  const m=gMode(); const w=$('#g-pads');
+  if(m==='straight'){ w.innerHTML='<div class="pad" id="pad-s" role="button" aria-label="Handtaste">TASTE<small>Leertaste</small></div>';
+    const p=$('#pad-s'); p.onpointerdown=e=>{e.preventDefault(); p.setPointerCapture(e.pointerId); straight(true);}; p.onpointerup=p.onpointercancel=e=>{e.preventDefault(); straight(false);}; }
+  else{ w.innerHTML='<div class="pad" id="pad-dit" role="button" aria-label="Punkt-Paddle">PUNKT ·<small>Strg links / J</small></div><div class="pad" id="pad-dah" role="button" aria-label="Strich-Paddle">STRICH –<small>Strg rechts / K</small></div>';
+    for(const [id,wh] of [['pad-dit','dit'],['pad-dah','dah']]){const p=$('#'+id); p.onpointerdown=e=>{e.preventDefault(); p.setPointerCapture(e.pointerId); paddle(wh,true);}; p.onpointerup=p.onpointercancel=e=>{e.preventDefault(); paddle(wh,false);};} }
+  $('#g-fnote').textContent=m==='straight'?'Misst dein Handtasten-Timing im Verhältnis zur Punktlänge. Mindestens 10 Elemente geben.':'Mit dem Paddle macht der Keyer das Element-Timing. Gemessen wird nur bei der Handtaste.';
+}
+function rate(v,ideal){const e=Math.abs(v-ideal)/ideal; return e<=.15?['gut','cg']:e<=.3?['ok','mid']:['üben','cb'];}
+function fistRender(){
+  const n=F.dit.length+F.dah.length; const el=$('#g-fist');
+  if(n<10){el.innerHTML=`<dt>Elemente</dt><dd>${n} / 10</dd>`; return;}
+  const avg=a=>a.reduce((x,y)=>x+y,0)/a.length;
+  const d=F.dit.length?avg(F.dit):DEC.dit;
+  const rows=[['Punkt',Math.round(d)+' ms',null],['Tempo',Math.round(1200/d)+' WPM',null]];
+  if(F.dah.length) {const r=avg(F.dah)/d; rows.push(['Strich : Punkt',r.toFixed(2)+' (3,0)',rate(r,3)]);}
+  if(F.intra.length){const r=avg(F.intra)/d; rows.push(['Elementpause : Punkt',r.toFixed(2)+' (1,0)',rate(r,1)]);}
+  if(F.cgap.length>2){const r=avg(F.cgap)/d; rows.push(['Zeichenpause : Punkt',r.toFixed(2)+' (3,0)',rate(r,3)]);}
+  if(F.dit.length>4){const m=avg(F.dit); const sd=Math.sqrt(avg(F.dit.map(x=>(x-m)**2))); const cv=Math.max(0,100-sd/m*100); rows.push(['Gleichmass Punkte',Math.round(cv)+' %',cv>=85?['gut','cg']:cv>=70?['ok','mid']:['üben','cb']]);}
+  el.innerHTML=rows.map(([k,v,r])=>`<dt>${k}</dt><dd>${v}${r?`<span class="rate ${r[1]==='mid'?'':r[1]}" style="${r[1]==='mid'?'background:var(--mid-soft);color:var(--mid)':''}">${r[0]}</span>`:''}</dd>`).join('');
+}
+/* Morsebaum */
+let treeNodes=[];
+function buildTree(){
+  const nodes=new Set(['']); for(const p of Object.keys(REV)) if(p.length<=5) for(let i=1;i<=p.length;i++) nodes.add(p.slice(0,i));
+  const W=960, top=30, row=58;
+  const pos=p=>{let x=.5,st=.25; for(const e of p){x+=e==='.'?-st:st; st/=2;} return [16+x*(W-32), top+p.length*row];};
+  let lines='', circ='';
+  treeNodes=[...nodes].sort((a,b)=>a.length-b.length);
+  for(const p of treeNodes){
+    const [x,y]=pos(p);
+    if(p){const [px,py]=pos(p.slice(0,-1)); lines+=`<line data-p="${p}" x1="${px}" y1="${py}" x2="${x}" y2="${y}"></line>`;}
+    const ch=REV[p]; const r=p===''?13:ch?(p.length>=5?11:14):4;
+    const label=p===''?'':(ch?esc(ch.replace(/[<>]/g,'')):'');
+    circ+=`<g class="tn${ch||p===''?'':' empty'}" data-p="${p}" data-ch="${ch?esc(ch):''}"><circle cx="${x}" cy="${y}" r="${r}"></circle>${label?`<text x="${x}" y="${y}" style="${label.length>1?'font-size:9px':''}">${label}</text>`:''}</g>`;
+  }
+  const svg=$('#tree');
+  svg.innerHTML=`<text class="axis" x="20" y="16" style="text-anchor:start">· Punkt</text><text class="axis" x="940" y="16" style="text-anchor:end">Strich –</text>`+lines+circ;
+  svg.querySelectorAll('g.tn').forEach(g=>{ const ch=g.dataset.ch; if(ch) g.addEventListener('click',()=>{play(ch); treeShow(g.dataset.p,true); setTimeout(()=>treeShow(''),900);}); });
+}
+function treeShow(p,final){
+  const svg=$('#tree');
+  svg.querySelectorAll('.on,.cur').forEach(e=>e.classList.remove('on','cur'));
+  if(!p) return;
+  for(let i=0;i<=p.length;i++){const q=p.slice(0,i); const g=svg.querySelector(`g[data-p="${q}"]`); if(g) g.classList.add(i===p.length?'cur':'on'); if(i>0){const l=svg.querySelector(`line[data-p="${q}"]`); if(l) l.classList.add('on');}}
+}
+/* Tastatur auf der Geben-Seite */
+function isField(t){return t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.tagName==='SELECT');}
+const DIT_KEYS=['ControlLeft','KeyJ','Comma'], DAH_KEYS=['ControlRight','KeyK','Period'];
+document.addEventListener('keydown',e=>{
+  if(view==='geben'&&!isField(e.target)){
+    const m=gMode();
+    if(m==='straight'&&(e.code==='Space'||e.code==='ControlLeft'||e.code==='ControlRight')){ e.preventDefault(); if(document.activeElement&&document.activeElement.tagName==='BUTTON') document.activeElement.blur(); if(!e.repeat) straight(true); $('#g-hint').textContent=''; return; }
+    if(m!=='straight'&&(DIT_KEYS.includes(e.code)||DAH_KEYS.includes(e.code))){ e.preventDefault(); if(!e.repeat) paddle(DIT_KEYS.includes(e.code)?'dit':'dah',true); $('#g-hint').textContent=''; return; }
+    if(m!=='straight'&&e.code==='Space') e.preventDefault();
+  }
+  if(view==='reflex'&&RX.run&&RX.wait&&!isField(e.target)&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&e.key.length===1){ e.preventDefault(); rxAnswer(e.key.toUpperCase()); }
+},true);
+document.addEventListener('keyup',e=>{
+  if(view!=='geben'||isField(e.target)) return;
+  const m=gMode();
+  if(m==='straight'&&(e.code==='Space'||e.code==='ControlLeft'||e.code==='ControlRight')){ e.preventDefault(); straight(false); }
+  if(m!=='straight'&&(DIT_KEYS.includes(e.code)||DAH_KEYS.includes(e.code))){ e.preventDefault(); paddle(DIT_KEYS.includes(e.code)?'dit':'dah',false); }
+},true);
+window.addEventListener('blur',()=>{ if(DEC.keyDown&&gMode()==='straight') straight(false); KY.dit=KY.dah=false; padVis(false); });
+
+/* ---------- QSO ---------- */
+const QS={phase:0,st:null,texts:[],fields:[],log:[]};
+function greet(){const h=new Date().getHours(); return h<10?'GM':h<17?'GA':'GE';}
+function numTxt(n){ const s=String(n).padStart(3,'0'); return $('#q-cut').checked?s.replace(/0/g,'T').replace(/9/g,'N'):s; }
+function qFields(list){
+  const w=$('#q-fields'); w.innerHTML='';
+  list.forEach(([id,lab])=>{ const l=document.createElement('label'); l.className='f'; l.htmlFor='q-'+id; l.innerHTML=`${lab}<input id="q-${id}" type="text" autocomplete="off" spellcheck="false">`; w.appendChild(l); });
+  const f=w.querySelector('input'); if(f) f.focus();
+  w.querySelectorAll('input').forEach(i=>i.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); qGo(); } }));
+}
+function qGo(){
+  const type=$('#q-type').value; const my=S.call||'HB9XYZ';
+  if(QS.phase===0||QS.phase===3){
+    const ci=genCallInfo(); const cut=$('#q-cut').checked;
+    QS.st={call:ci.call,qth:ci.qth,name:rand(NAMES),rst:rand(['599','579','589','569','559']),nr:randint(1,450),park:rand(['HB-0001','HB-0042','DE-0567','OE-0103','F-0912','I-1234'])};
+    const s=QS.st;
+    QS.type=type; QS.log=[]; QS.score=[0,0];
+    if(type==='rag') QS.t1=`CQ CQ CQ DE ${s.call} ${s.call} K`;
+    else if(type==='test') QS.t1=`CQ TEST ${s.call} ${s.call} TEST`;
+    else QS.t1=`CQ POTA DE ${s.call} ${s.call} POTA K`;
+    QS.phase=1; $('#q-phase').textContent='1 · CQ hören'; $('#q-hint').textContent='Rufzeichen der rufenden Station mitschreiben, dann Enter.';
+    qFields([['call','Rufzeichen der Station']]); $('#q-go').textContent='Antworten'; $('#q-replay').disabled=false; $('#q-result').innerHTML='';
+    QS.cur=QS.t1; play(QS.t1); return;
+  }
+  const s=QS.st;
+  if(QS.phase===1){
+    const v=norm($('#q-call').value); const ok=v===s.call; mark('call',ok,s.call);
+    QS.log.push(['Station',QS.t1]);
+    const reply=QS.type==='test'?`${my}`:QS.type==='pota'?`${my}`:`${s.call} DE ${my} ${my} K`;
+    QS.log.push(['Du',reply]);
+    if(QS.type==='rag') QS.t2=`${my} DE ${s.call} ${greet()} TNX FER CALL = UR RST ${s.rst} ${s.rst} = NAME ${s.name} ${s.name} = QTH ${s.qth} ${s.qth} = HW? <AR> ${my} DE ${s.call} <KN>`;
+    else if(QS.type==='test') QS.t2=`${my} 5NN ${numTxt(s.nr)}`;
+    else QS.t2=`${my} TU UR ${s.rst.replace(/9/g,$('#q-cut').checked?'N':'9')} ${s.rst.replace(/9/g,$('#q-cut').checked?'N':'9')} ${s.park} ${s.park} <BT> 73 <KN>`;
+    QS.phase=2; $('#q-phase').textContent='2 · Durchgang aufnehmen';
+    $('#q-hint').textContent=ok?'Rufzeichen richtig. Du hast geantwortet, jetzt kommt die Antwort.':'Rufzeichen war '+s.call+'. Weiter geht es trotzdem.';
+    setTimeout(()=>{
+      if(QS.type==='rag') qFields([['rst','RST'],['name','Name'],['qth','QTH']]);
+      else if(QS.type==='test') qFields([['nr','Seriennummer']]);
+      else qFields([['rst','RST'],['park','Park-Referenz']]);
+      $('#q-go').textContent='Auswerten'; QS.cur=QS.t2; play(QS.t2);
+    },500);
+    return;
+  }
+  if(QS.phase===2){
+    const val=id=>norm(($('#q-'+id)||{}).value||'');
+    const digits=x=>x.replace(/T/g,'0').replace(/N/g,'9');
+    if(QS.type==='rag'){ mark('rst',digits(val('rst'))===s.rst,s.rst); mark('name',val('name')===s.name,s.name); mark('qth',val('qth')===s.qth,s.qth); }
+    else if(QS.type==='test'){ mark('nr',Number(digits(val('nr')))===s.nr,String(s.nr).padStart(3,'0')); }
+    else { mark('rst',digits(val('rst'))===s.rst,s.rst); mark('park',val('park').replace(/\s/g,'')===s.park,s.park); }
+    QS.log.push(['Station',QS.t2]);
+    const fin=QS.type==='rag'?`${s.call} DE ${my} R TNX ${s.name} UR RST 599 = NAME ... = QTH ... 73 <SK>`:QS.type==='test'?`TU 5NN ${numTxt(randint(1,300))}`:`TU 5NN 73`;
+    QS.log.push(['Du (Beispiel)',fin]);
+    const [ok,tot]=QS.score; P.qso.n++; P.qso.ok+=ok; P.qso.tot+=tot; persist(); addTime(30);
+    $('#q-result').innerHTML=`<div class="result ${ok===tot?'pass':'fail'}">${ok} von ${tot} Feldern richtig${ok===tot?'. Sauberes QSO.':'.'}</div>`;
+    $('#q-log').innerHTML=QS.log.map(([w,t])=>`<div><div class="who">${esc(w)}</div>${esc(t)}</div>`).join('');
+    QS.phase=3; $('#q-phase').textContent='Fertig'; $('#q-hint').textContent='Rote Felder zeigen die richtige Angabe.'; $('#q-go').textContent='Nächstes QSO';
+    qStats(); play(QS.type==='rag'?`${my} DE ${s.call} TU 73 <SK> E E`:'TU E E');
+  }
+}
+function mark(id,ok,right){ const i=$('#q-'+id); QS.score[1]++; if(ok) QS.score[0]++; if(!i) return; i.classList.add(ok?'cg':'cb'); if(!ok) i.value=(i.value?i.value.toUpperCase()+' → ':'')+right; i.readOnly=true; }
+function qStats(){ $('#q-count').textContent=P.qso.n; $('#q-rate').textContent=P.qso.tot?Math.round(P.qso.ok/P.qso.tot*100)+' %':'–'; }
+
+/* ---------- Verdrahtung ---------- */
+function renderAll(){ refreshStatus(); renderStart(); renderKoch(); rxStats(); qStats(); }
+function init(){
+  bindSettings();
+  $('#k-start').onclick=kochStart; $('#k-stop').onclick=kochAbort;
+  $('#k-replay').onclick=()=>{play(KS.cur); $('#k-input').focus();};
+  $('#k-input').addEventListener('input',e=>{ const v=e.target.value.replace(/\s/g,''); if(v.length>=S.group) kochCheck(); });
+  $('#k-input').addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault(); kochCheck();} });
+  $('#k-hearnew').onclick=()=>{const c=kochSet().slice(-1)[0]; play(`${c} ${c} ${c}`);};
+  $('#k-up').onclick=()=>{ if(S.level<KOCH.length-1){S.level++; saveS(); renderKoch();} };
+  $('#k-down').onclick=()=>{ if(S.level>1){S.level--; saveS(); renderKoch();} };
+  $('#rx-start').onclick=rxStart; $('#rx-stop').onclick=()=>{rxAbort(); stopAudio(); $('#rx-big').textContent='·'; $('#rx-pat').textContent='Abgebrochen';};
+  $('#h-start').onclick=()=>{HS.wpm=null; hNext();};
+  $('#h-replay').onclick=()=>{ if(HS.cur) hPlay(); $('#h-input').focus(); };
+  $('#h-reveal').onclick=()=>{ hCheck(true); $('#h-input').focus(); };
+  $('#h-input').addEventListener('keydown',e=>{ if(e.key!=='Enter') return; e.preventDefault(); if(!HS.started){HS.wpm=null; hNext(); return;} if(HS.checked) hNext(); else hCheck(false); });
+  $('#h-src').onchange=()=>{ $('#h-own-wrap').style.display=$('#h-src').value==='eigen'?'flex':'none'; };
+  $('#g-mode').onchange=()=>{ KY.dit=KY.dah=false; buildPads(); $('#g-mode').blur(); };
+  $('#g-tgt').onchange=()=>{ newTarget(); $('#g-tgt').blur(); };
+  $('#g-newtgt').onclick=newTarget;
+  $('#g-heartgt').onclick=()=>{ if(GS.target) play(GS.target); };
+  $('#g-clear').onclick=()=>{ GS.text=''; GS.done=false; renderOut(); };
+  $('#g-freset').onclick=()=>{ F.dit=[];F.dah=[];F.intra=[];F.cgap=[]; fistRender(); };
+  document.addEventListener('pointerdown',()=>{ ac(); $('#g-hint').textContent=''; },{once:true});
+  $('#q-go').onclick=qGo; $('#q-replay').onclick=()=>{ if(QS.cur) play(QS.cur); };
+  buildTree(); buildPads(); newTarget(); fistRender();
+  DEC.dit=ditMs();
+  window.addEventListener('hashchange',route);
+  renderAll(); route();
+}
+init();
+</script>
+</body>
+</html>
