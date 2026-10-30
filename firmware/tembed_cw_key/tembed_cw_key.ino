@@ -117,6 +117,10 @@ QueueHandle_t evq;
 TaskHandle_t playerH;
 
 struct KeyEv { bool down; uint32_t t; char el; };
+// Typen vor der ersten Funktion definieren: die Arduino IDE setzt dort automatisch
+// Funktionsprototypen ein, und die brauchen diese Typen schon.
+struct Contact { uint8_t pin; bool state, raw; uint32_t at; };
+Contact cDit{PIN_DIT, false, false, 0}, cDah{PIN_DAH, false, false, 0};
 
 #if USE_DISPLAY
 Arduino_DataBus *bus = new Arduino_ESP32SPI(PIN_LCD_DC, PIN_LCD_CS, PIN_LCD_CLK, PIN_LCD_MOSI, GFX_NOT_DEFINED);
@@ -167,8 +171,6 @@ const uint32_t L_AMBER = 0xFF8000, L_GREEN = 0x00FF00, L_RED = 0xFF0000, L_IDLE 
 // =====================================================================
 //  Kontakte und Keyer
 // =====================================================================
-struct Contact { uint8_t pin; bool state, raw; uint32_t at; };
-Contact cDit{PIN_DIT, false, false, 0}, cDah{PIN_DAH, false, false, 0};
 
 bool readContact(Contact &c) {
   bool r = digitalRead(c.pin) == LOW;
