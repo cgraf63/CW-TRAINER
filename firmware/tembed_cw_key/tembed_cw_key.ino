@@ -203,10 +203,10 @@ bool readContact(Contact &c) {
 }
 
 void keyOut(bool down, char el = 0) {
+  KeyEv e{down, millis(), el};
+  xQueueSend(evq, &e, 0);              // zuerst das Ereignis, dann den Zustand setzen
   keyState = down;
   if (hidOut()) { if (down) Keyboard.press(KEY_LEFT_CTRL); else Keyboard.release(KEY_LEFT_CTRL); }
-  KeyEv e{down, millis(), el};
-  xQueueSend(evq, &e, 0);
 }
 
 enum KS { K_IDLE, K_SEND, K_SPACE };
@@ -415,16 +415,18 @@ float goertzel(const float *x, int n, float f) {
 
 void micTask(void *) {
   static int16_t raw[MIC_N * 2];
-  static float x[MIC_N];
+  static float x[MIC_N], p[25], srt[25];
   const int NB = 25; float binAvg[NB] = {0};          // 400..1000 Hz in 25-Hz-Schritten
-  float nf = 0.001f, pk = 0.01f; bool on = false; int lockBin = 8;
+  float nf = 0.001f, pk = 0.01f; bool on = false; int lockBin = 8, confirm = 0;
   for (;;) {
     if (!micOk || mode != M_DECODER) {
-      if (micKey) { micKey = false; KeyEv e{false, millis(), 0}; xQueueSend(evq, &e, 0); }
+      if (micKey) { KeyEv e{false, millis(), 0}; xQueueSend(evq, &e, 0); micKey = false; }
+      on = false; confirm = 0;
       vTaskDelay(50); continue;
     }
     size_t got = 0;
     if (i2s_channel_read(rx, raw, sizeof(raw), &got, 100) != ESP_OK || got < sizeof(raw)) continue;
+    uint32_t now = millis();
     float mean = 0;
     for (int i = 0; i < MIC_N; i++) { x[i] = (raw[2 * i] + raw[2 * i + 1]) * (0.5f / 32768.0f); mean += x[i]; }
     mean /= MIC_N;
@@ -432,29 +434,42 @@ void micTask(void *) {
       float w = 0.5f - 0.5f * cosf(2.0f * PI * i / (MIC_N - 1));
       x[i] = (x[i] - mean) * w;
     }
-    // Tonhoehe suchen: Bin mit dem groessten Mittelwert
+    // Spektrum 400..1000 Hz
     int best = 0;
-    for (int b = 0; b < NB; b++) {
-      float p = goertzel(x, MIC_N, 400 + 25 * b);
-      binAvg[b] = binAvg[b] * 0.99f + p * 0.01f;
-      if (binAvg[b] > binAvg[best]) best = b;
-    }
-    if (binAvg[best] > binAvg[lockBin] * 1.5f) lockBin = best;   // Hysterese gegen Springen
-    micFreq = 400 + 25 * lockBin;
-    float mag = sqrtf(goertzel(x, MIC_N, micFreq)) / MIC_N;
+    for (int b = 0; b < NB; b++) { p[b] = goertzel(x, MIC_N, 400 + 25 * b); srt[b] = p[b]; if (p[b] > p[best]) best = b; }
+    for (int i = 1; i < NB; i++) { float v = srt[i]; int j = i - 1; while (j >= 0 && srt[j] > v) { srt[j + 1] = srt[j]; j--; } srt[j + 1] = v; }
+    float med = srt[NB / 2] + 1e-12f;
 
-    // Rauschboden und Spitzenwert nachfuehren
-    if (mag < nf) nf = mag; else nf += (mag - nf) * 0.003f;
-    if (mag > pk) pk = mag; else pk -= (pk - nf) * 0.004f;
+    // Tonhoehe nur nachfuehren, wenn ein klarer Ton da ist (nicht bei Rauschen oder Knacksern)
+    bool tonal = p[best] > med * 8.0f;
+    if (tonal) for (int b = 0; b < NB; b++) binAvg[b] = binAvg[b] * 0.95f + p[b] * 0.05f;
+    int cand = 0; for (int b = 1; b < NB; b++) if (binAvg[b] > binAvg[cand]) cand = b;
+    if (binAvg[cand] > binAvg[lockBin] * 1.3f) lockBin = cand;
+    micFreq = 400 + 25 * lockBin;
+    float pl = p[lockBin];                              // +-25 Hz Toleranz
+    if (lockBin > 0 && p[lockBin - 1] > pl) pl = p[lockBin - 1];
+    if (lockBin < NB - 1 && p[lockBin + 1] > pl) pl = p[lockBin + 1];
+    float mag = sqrtf(pl) / MIC_N;
+
+    // Rauschboden und Spitzenwert langsam nachfuehren
+    if (mag < nf) nf = mag; else nf += (mag - nf) * 0.002f;
+    if (mag > pk) pk = mag; else pk -= (pk - nf) * 0.0015f;
     if (pk < nf * 1.2f) pk = nf * 1.2f;
     float span = pk - nf;
     micLevel = constrain((mag - nf) / (span > 1e-6f ? span : 1e-6f), 0.0f, 1.0f);
-    bool enough = pk > nf * 4.0f;                       // ca. 12 dB Abstand noetig
-    bool next = on ? (enough && mag > nf + span * 0.35f) : (enough && mag > nf + span * 0.6f);
-    if (next != on) {
-      on = next; micKey = on;
-      KeyEv e{on, millis(), 0}; xQueueSend(evq, &e, 0);
-    }
+    bool enough = pk > nf * 5.0f;                       // ca. 14 dB Abstand noetig
+    bool atLock = pl > med * 6.0f;                      // der Ton liegt bei der gefundenen Tonhoehe
+    bool want = on ? (enough && mag > nf + span * 0.35f)
+                   : (enough && atLock && mag > nf + span * 0.6f);
+    // Wechsel erst nach 2 Bloecken (16 ms) bestaetigen: einzelne Stoerspitzen fallen weg
+    if (want != on) {
+      if (++confirm >= 2) {
+        on = want; confirm = 0;
+        KeyEv e{on, now - MIC_N * 1000 / SAMPLE_RATE, 0};
+        xQueueSend(evq, &e, 0);                         // zuerst das Ereignis, dann den Zustand
+        micKey = on;
+      }
+    } else confirm = 0;
   }
 }
 
@@ -480,10 +495,12 @@ void decodeEvents() {
     uint32_t d = e.t - downAt;
     char el = e.el;
     if (!el) {
-      if (d < 12) continue;
+      if (d < 12 || d < 0.3f * decDit) continue;       // Stoerspitze kuerzer als ein Drittel Punkt
       el = d < 2 * decDit ? '.' : '-';
-      decDit = 0.75f * decDit + 0.25f * (el == '.' ? d : d / 3.0f);
-      decDit = constrain(decDit, 25.0f, 400.0f);
+      float est = el == '.' ? d : d / 3.0f;
+      est = constrain(est, decDit * 0.75f, decDit * 1.33f);   // Ausreisser begrenzen
+      decDit = 0.85f * decDit + 0.15f * est;
+      decDit = constrain(decDit, 25.0f, 300.0f);
     } else decDit = ditMs();
     pat += el; upAt = e.t; pending = true; spaceDone = false;
   }
