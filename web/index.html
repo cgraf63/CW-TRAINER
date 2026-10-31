@@ -43,6 +43,13 @@
 }
 :root[data-theme="dark"][data-accent="petrol"]{--bg:#0b1618;--surface:#132124;--surface2:#192b2e;--line:#25393d;--accent:#3cc3cb;--accent-ink:#04191b;--accent-soft:#0f3437}
 :root[data-theme="dark"][data-accent="gruen"]{--bg:#0d150f;--surface:#152017;--surface2:#1b2a1e;--line:#283a2c;--accent:#63d07c;--accent-ink:#06200e;--accent-soft:#143421;--good:#2dd4bf;--good-soft:#0f302c}
+/* Orange: immer anthrazit, unabhängig vom hellen oder dunklen Modus des Geräts */
+:root[data-accent="orange"],:root[data-accent="orange"][data-theme]{
+  --bg:#2b2e32; --surface:#35393e; --surface2:#3e4349; --ink:#eef0f2; --muted:#aab2ba; --line:#4c535a;
+  --accent:#f5992e; --accent-ink:#1e1305; --accent-soft:#4d3a20;
+  --good:#5ad48a; --good-soft:#1f3d2b; --bad:#ff8a7a; --bad-soft:#4a2724; --mid:#f5cf4a; --mid-soft:#463d1c;
+  color-scheme:dark;
+}
 .swatches{display:flex;gap:8px}
 .swatch{flex:1;display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface2);cursor:pointer;font-weight:600}
 .swatch i{width:16px;height:16px;border-radius:50%;background:var(--sw)}
@@ -450,7 +457,7 @@ kbd{font-family:var(--f-mono);font-size:12px;padding:1px 6px;border:1px solid va
   <div class="f"><span>Farbschema</span><div class="swatches" role="group" aria-label="Farbschema">
     <button type="button" class="swatch" data-acc="petrol" style="--sw:#0b6e75"><i></i>Petrol</button>
     <button type="button" class="swatch" data-acc="gruen" style="--sw:#2b7a3d"><i></i>Grün</button>
-    <button type="button" class="swatch" data-acc="orange" style="--sw:#b45309"><i></i>Orange</button>
+    <button type="button" class="swatch" data-acc="orange" style="--sw:#f5992e"><i style="box-shadow:0 0 0 3px #2b2e32"></i>Orange (anthrazit)</button>
   </div></div>
   <div class="f"><label for="s-wpm">Zeichentempo (WPM)</label><div class="rng"><input id="s-wpm" type="range" min="5" max="45"><output id="o-wpm"></output></div></div>
   <div class="f"><label for="s-eff">Effektives Tempo, Farnsworth (WPM)</label><div class="rng"><input id="s-eff" type="range" min="3" max="45"><output id="o-eff"></output></div></div>
