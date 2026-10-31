@@ -33,6 +33,20 @@
   --good:#4ade80; --good-soft:#123222; --bad:#f8877c; --bad-soft:#3b1a17; --mid:#facc15; --mid-soft:#352d0e;
   color-scheme:dark;
 }
+
+/* Farbschemata: Petrol und Grün überschreiben nur Akzent und Grundton, Orange ist der Standard oben */
+:root[data-accent="petrol"]{--bg:#e6eef0;--surface2:#f0f5f6;--line:#cfdcdf;--accent:#0b6e75;--accent-ink:#ffffff;--accent-soft:#d3ebed}
+:root[data-accent="gruen"]{--bg:#e8eee8;--surface2:#f2f6f2;--line:#d1dcd2;--accent:#2b7a3d;--accent-ink:#ffffff;--accent-soft:#d9eedd;--good:#0f766e;--good-soft:#d4f0ec}
+@media (prefers-color-scheme: dark){
+  :root[data-accent="petrol"]:not([data-theme="light"]){--bg:#0b1618;--surface:#132124;--surface2:#192b2e;--line:#25393d;--accent:#3cc3cb;--accent-ink:#04191b;--accent-soft:#0f3437}
+  :root[data-accent="gruen"]:not([data-theme="light"]){--bg:#0d150f;--surface:#152017;--surface2:#1b2a1e;--line:#283a2c;--accent:#63d07c;--accent-ink:#06200e;--accent-soft:#143421;--good:#2dd4bf;--good-soft:#0f302c}
+}
+:root[data-theme="dark"][data-accent="petrol"]{--bg:#0b1618;--surface:#132124;--surface2:#192b2e;--line:#25393d;--accent:#3cc3cb;--accent-ink:#04191b;--accent-soft:#0f3437}
+:root[data-theme="dark"][data-accent="gruen"]{--bg:#0d150f;--surface:#152017;--surface2:#1b2a1e;--line:#283a2c;--accent:#63d07c;--accent-ink:#06200e;--accent-soft:#143421;--good:#2dd4bf;--good-soft:#0f302c}
+.swatches{display:flex;gap:8px}
+.swatch{flex:1;display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface2);cursor:pointer;font-weight:600}
+.swatch i{width:16px;height:16px;border-radius:50%;background:var(--sw)}
+.swatch[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
 *{box-sizing:border-box}
 html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
@@ -433,6 +447,11 @@ kbd{font-family:var(--f-mono);font-size:12px;padding:1px 6px;border:1px solid va
 <div class="shade" id="shade"></div>
 <aside class="drawer" id="drawer" aria-label="Einstellungen">
   <div class="row" style="justify-content:space-between"><h2>Einstellungen</h2><button class="btn" id="close-settings" type="button">Fertig</button></div>
+  <div class="f"><span>Farbschema</span><div class="swatches" role="group" aria-label="Farbschema">
+    <button type="button" class="swatch" data-acc="petrol" style="--sw:#0b6e75"><i></i>Petrol</button>
+    <button type="button" class="swatch" data-acc="gruen" style="--sw:#2b7a3d"><i></i>Grün</button>
+    <button type="button" class="swatch" data-acc="orange" style="--sw:#b45309"><i></i>Orange</button>
+  </div></div>
   <div class="f"><label for="s-wpm">Zeichentempo (WPM)</label><div class="rng"><input id="s-wpm" type="range" min="5" max="45"><output id="o-wpm"></output></div></div>
   <div class="f"><label for="s-eff">Effektives Tempo, Farnsworth (WPM)</label><div class="rng"><input id="s-eff" type="range" min="3" max="45"><output id="o-eff"></output></div></div>
   <div class="f"><label for="s-tone">Tonhöhe (Hz)</label><div class="rng"><input id="s-tone" type="range" min="400" max="1000" step="10"><output id="o-tone"></output></div></div>
@@ -500,7 +519,7 @@ function genCallInfo(){
 }
 
 /* ---------- Speicher ---------- */
-const DEF={wpm:20,eff:12,tone:600,vol:.6,level:1,group:5,groups:20,call:'HB9XYZ',sideBrowser:true};
+const DEF={wpm:20,eff:12,tone:600,vol:.6,level:1,group:5,groups:20,call:'HB9XYZ',sideBrowser:true,accent:'petrol'};
 function load(k,d){try{const v=JSON.parse(localStorage.getItem(k)); return v?Object.assign(JSON.parse(JSON.stringify(d)),v):JSON.parse(JSON.stringify(d));}catch(e){return JSON.parse(JSON.stringify(d));}}
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 let S=load('cwl.settings',DEF);
@@ -598,6 +617,9 @@ function bindSettings(){
   r('wpm','wpm',v=>v); r('eff','eff',v=>v); r('tone','tone',v=>v); r('vol','vol',v=>Math.round(v*100)+' %');
   for(const k of ['group','groups']){const el=$('#s-'+k); el.value=S[k]; el.addEventListener('change',()=>{S[k]=Number(el.value); saveS(); refreshStatus();});}
   const c=$('#s-call'); c.value=S.call; c.addEventListener('input',()=>{S.call=c.value.toUpperCase().replace(/[^A-Z0-9/]/g,'')||'HB9XYZ'; saveS();});
+  const applyAcc=()=>{ document.documentElement.setAttribute('data-accent',S.accent); $$('.swatch').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.acc===S.accent))); };
+  $$('.swatch').forEach(b=>b.onclick=()=>{ S.accent=b.dataset.acc; saveS(); applyAcc(); });
+  applyAcc();
   const sd=$('#s-side'); sd.checked=S.sideBrowser; sd.onchange=()=>{S.sideBrowser=sd.checked; saveS(); if(!sd.checked) sideOff();};
   $('#s-test').onclick=()=>play('VVV');
   let armed=false;
