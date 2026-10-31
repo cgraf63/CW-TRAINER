@@ -133,6 +133,8 @@ kbd{font-family:var(--f-mono);font-size:12px;padding:1px 6px;border:1px solid va
 .target{font-family:var(--f-mono);font-size:22px;letter-spacing:.12em}
 .target span{border-radius:4px;padding:0 1px}
 .pads{display:flex;gap:12px;user-select:none;-webkit-user-select:none;touch-action:none}
+/* Tastenflächen nur auf Touch-Geräten; am Computer reicht der kleine Punkt neben dem Muster */
+@media (hover: hover) and (pointer: fine){.pads{display:none}}
 .pad{flex:1;height:110px;border-radius:12px;border:2px solid var(--line);background:var(--surface2);display:flex;align-items:center;justify-content:center;flex-direction:column;font-weight:700;cursor:pointer;gap:4px}
 .pad small{font-weight:500;color:var(--muted);font-size:12px}
 .pad.down{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
@@ -365,7 +367,7 @@ kbd{font-family:var(--f-mono);font-size:12px;padding:1px 6px;border:1px solid va
 <section class="view" id="view-geben">
   <div class="vhead">
     <h2>Geben</h2>
-    <p class="muted">Handtaste: <kbd>Leertaste</kbd>. Paddle: <kbd>Strg links</kbd> oder <kbd>J</kbd> für Punkt, <kbd>Strg rechts</kbd> oder <kbd>K</kbd> für Strich. Ein echtes Paddle schliesst du über ein USB-Interface an, das diese Strg-Tasten sendet: ein vBand- oder Vail-Adapter oder ein selbstgebauter ESP32-S3. Auf dem Handy die Flächen unten antippen.</p>
+    <p class="muted">Handtaste: <kbd>Leertaste</kbd>. Paddle: <kbd>Strg links</kbd> oder <kbd>J</kbd> für Punkt, <kbd>Strg rechts</kbd> oder <kbd>K</kbd> für Strich. Ein echtes Paddle schliesst du über ein USB-Interface an, das diese Strg-Tasten sendet: ein vBand- oder Vail-Adapter oder ein selbstgebauter ESP32-S3. Auf Handy und Tablet erscheinen unten Tastenflächen zum Antippen. Der kleine Punkt neben dem Muster zeigt, wann die Taste gedrückt ist.</p>
   </div>
   <div class="grid2">
     <div class="card">
