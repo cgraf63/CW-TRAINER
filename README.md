@@ -1,6 +1,6 @@
 # CW-TRAINER
 
-**DitDah Lab**: CW lernen Morse lernen im Browser und mit einem echten Paddle oder einer Handtaste am LilyGO T-Embed (ESP32-S3).
+**DitDah Lab**: Morse lernen im Browser und mit einem echten Paddle oder einer Handtaste am LilyGO T-Embed (ESP32-S3).
 
 ## Inhalt
 
