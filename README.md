@@ -53,7 +53,19 @@ Interne Pull-ups sind aktiv, keine Widerstände nötig.
 ### Drehknopf
 
 - Drehen: aktuellen Wert ändern
-- Lang drücken (> 0,8 s): nächster Wert: WPM, Abstand (Farnsworth 1,0x–4,0x), Lektion (1–40), Lautstärke
+- Lang drücken (> 0,8 s): nächster Wert. Angezeigt werden nur die Werte, die in der aktuellen Betriebsart wirken:
+
+| Wert | Bedeutung | Betriebsarten |
+|---|---|---|
+| WPM | Zeichentempo 8–40 | KEYER, HOEREN, ECHO |
+| Abstand | Pausen dehnen (Farnsworth) 1,0x–4,0x | HOEREN, ECHO |
+| Lektion | Koch-Lektion 1–40 | HOEREN, ECHO |
+| Iambic | Keyer-Modus A oder B | KEYER, ECHO |
+| PC-Ton | Lautsprecher an/aus, wenn du am PC übst | KEYER, HANDTASTE |
+| Laut | Lautstärke 0–10 | alle mit Ton |
+
+**PC-Ton aus** schaltest du, wenn der PC selbst einen Mithörton spielt (Web-App, vBand, Vail). Sonst hörst du zwei Töne mit Verzögerung. HOEREN und ECHO behalten ihren Ton.
+
 - Punkt-Paddle beim Einschalten gedrückt halten: Paddles tauschen
 - Alle Werte bleiben gespeichert
 

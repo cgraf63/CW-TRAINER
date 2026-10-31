@@ -16,9 +16,13 @@
               Funkgeraete-Lautsprecher). Die Tonhoehe wird automatisch gefunden.
 
   Drehknopf drehen: Wert aendern. Knopf lang druecken (> 0,8 s): naechster Wert.
-    WPM      Zeichentempo 8..40
-    ABSTAND  Pausen dehnen (Farnsworth) 1,0x..4,0x, fuer HOEREN und ECHO
-    LEKTION  Koch-Lektion 1..40 (Zeichenvorrat fuer HOEREN und ECHO)
+  Angezeigt werden nur die Werte, die in der aktuellen Betriebsart wirken:
+    WPM      Zeichentempo 8..40                       KEYER, HOEREN, ECHO
+    ABSTAND  Pausen dehnen (Farnsworth) 1,0x..4,0x    HOEREN, ECHO
+    LEKTION  Koch-Lektion 1..40                       HOEREN, ECHO
+    IAMBIC   Keyer-Modus A oder B                     KEYER, ECHO
+    PC-TON   Lautsprecher in KEYER und HANDTASTE an/aus (aus, wenn der
+             PC-Mithoerton laeuft: sonst hoert man beide Toene versetzt)
     LAUT     Lautstaerke 0..10
   Punkt-Paddle beim Einschalten gedrueckt halten: Paddles tauschen.
   Alle Werte bleiben nach dem Ausschalten gespeichert.
@@ -90,7 +94,7 @@
 
 enum Mode : uint8_t { M_KEYER, M_PADDLE, M_STRAIGHT, M_LISTEN, M_ECHO, M_DECODER, M_COUNT };
 const char *MODE_NAME[] = { "KEYER", "PADDLE", "HANDTASTE", "HOEREN", "ECHO", "DECODER" };
-enum Knob : uint8_t { K_WPM, K_GAP, K_LEVEL, K_VOL, K_COUNT };
+enum Knob : uint8_t { K_WPM, K_GAP, K_LEVEL, K_IAMBIC, K_PCTONE, K_VOL, K_COUNT };
 
 volatile uint8_t mode = M_KEYER;
 volatile int  wpm = 20;
@@ -105,7 +109,15 @@ volatile float micFreq = 0;
 volatile int  encSteps = 0;
 volatile bool paddleTap = false;
 bool swapPaddles = false;
-uint8_t knob = K_WPM;
+uint8_t knob = 0;                   // Index in die Werteliste der aktuellen Betriebsart
+volatile bool iambicB = true;       // false = Iambic A
+volatile bool pcTone = true;        // Lautsprecher in KEYER und HANDTASTE
+
+// Welche Werte der Drehknopf je Betriebsart einstellt
+const uint8_t KN_KEYER[]    = { K_WPM, K_IAMBIC, K_PCTONE, K_VOL };
+const uint8_t KN_STRAIGHT[] = { K_PCTONE, K_VOL };
+const uint8_t KN_LISTEN[]   = { K_WPM, K_GAP, K_LEVEL, K_VOL };
+const uint8_t KN_ECHO[]     = { K_WPM, K_GAP, K_LEVEL, K_IAMBIC, K_VOL };
 
 const char *KOCH = "KMURESNAPTLWI.JZ=FOY,VG5/Q92H38B?47C1D60X";
 const int KOCH_LEN = 41;
@@ -121,6 +133,16 @@ struct KeyEv { bool down; uint32_t t; char el; };
 // Funktionsprototypen ein, und die brauchen diese Typen schon.
 struct Contact { uint8_t pin; bool state, raw; uint32_t at; };
 Contact cDit{PIN_DIT, false, false, 0}, cDah{PIN_DAH, false, false, 0};
+struct KnobList { const uint8_t *k; uint8_t n; };
+KnobList knobList(uint8_t m) {
+  switch (m) {
+    case 0: return { KN_KEYER, sizeof(KN_KEYER) };
+    case 2: return { KN_STRAIGHT, sizeof(KN_STRAIGHT) };
+    case 3: return { KN_LISTEN, sizeof(KN_LISTEN) };
+    case 4: return { KN_ECHO, sizeof(KN_ECHO) };
+    default: return { nullptr, 0 };          // PADDLE und DECODER: nichts einzustellen
+  }
+}
 
 #if USE_DISPLAY
 Arduino_DataBus *bus = new Arduino_ESP32SPI(PIN_LCD_DC, PIN_LCD_CS, PIN_LCD_CLK, PIN_LCD_MOSI, GFX_NOT_DEFINED);
@@ -216,7 +238,7 @@ void keyerStep(bool dCh, bool aCh) {
     case K_SEND:
       if ((int32_t)(now - tEnd) >= 0) {
         keyOut(false, curEl);
-        if (squeezed && !(D.state && A.state)) { if (curEl == '.') memDah = true; else memDit = true; }
+        if (iambicB && squeezed && !(D.state && A.state)) { if (curEl == '.') memDah = true; else memDit = true; }
         squeezed = D.state && A.state;
         curEl = 0; ks = K_SPACE; tEnd = now + ditMs();
       }
@@ -294,7 +316,9 @@ void audioTask(void *) {
   const float step = 2.0f * PI * TONE_HZ / SAMPLE_RATE;
   const float ramp = 1.0f / (0.004f * SAMPLE_RATE);
   for (;;) {
-    float target = (keyState || playTone) && mode != M_DECODER ? 1.0f : 0.0f;
+    bool pcMode = mode == M_KEYER || mode == M_STRAIGHT;
+    bool keyTone = keyState && !(pcMode && !pcTone);
+    float target = (keyTone || playTone) && mode != M_DECODER ? 1.0f : 0.0f;
     float amp = 3000.0f * volume;
     for (int i = 0; i < N; i++) {
       if (env < target) env = fminf(target, env + ramp);
@@ -569,7 +593,9 @@ void knobText(char *buf, uint8_t k) {
     case K_WPM:   sprintf(buf, "%d WPM", wpm); break;
     case K_GAP:   sprintf(buf, "Abst %d.%dx", gap10 / 10, gap10 % 10); break;
     case K_LEVEL: sprintf(buf, "Lek %d", level); break;
-    case K_VOL:   sprintf(buf, "Laut %d", volume); break;
+    case K_IAMBIC: sprintf(buf, "Iambic %c", iambicB ? 'B' : 'A'); break;
+    case K_PCTONE: sprintf(buf, "PC-Ton %s", pcTone ? "an" : "aus"); break;
+    case K_VOL:   if (volume) sprintf(buf, "Laut %d", volume); else sprintf(buf, "Laut aus"); break;
   }
 }
 
@@ -577,13 +603,17 @@ void drawHeader() {
 #if USE_DISPLAY
   gfx->fillRect(0, 0, 320, 46, C_BG);
   gfx->setTextSize(2); gfx->setTextColor(C_ACC); gfx->setCursor(6, 5); gfx->print(MODE_NAME[mode]);
-  char b[24]; knobText(b, knob);
-  gfx->setTextColor(C_FG); gfx->setCursor(320 - 12 * strlen(b) - 6, 5); gfx->print(b);
-  gfx->setTextSize(1); int x = 6;
-  for (uint8_t k = 0; k < K_COUNT; k++) {
-    knobText(b, k); gfx->setTextColor(k == knob ? C_ACC : C_DIM); gfx->setCursor(x, 30); gfx->print(b); x += 6 * strlen(b) + 14;
+  char b[24]; KnobList kl = knobList(mode);
+  if (kl.n) {
+    knobText(b, kl.k[knob % kl.n]);
+    gfx->setTextColor(C_FG); gfx->setCursor(320 - 12 * strlen(b) - 6, 5); gfx->print(b);
   }
-  if (swapPaddles) { gfx->setTextColor(C_DIM); gfx->setCursor(x, 30); gfx->print("getauscht"); }
+  gfx->setTextSize(1); int x = 6;
+  for (uint8_t i = 0; i < kl.n; i++) {
+    knobText(b, kl.k[i]); gfx->setTextColor(i == knob % kl.n ? C_ACC : C_DIM); gfx->setCursor(x, 30); gfx->print(b); x += 6 * strlen(b) + 14;
+  }
+  if (!kl.n) { gfx->setTextColor(C_DIM); gfx->setCursor(x, 30); gfx->print(mode == M_PADDLE ? "Einstellungen in der App" : "Tonhoehe automatisch"); x += 150; }
+  if (swapPaddles && x + 60 < 320) { gfx->setTextColor(C_DIM); gfx->setCursor(x, 30); gfx->print("getauscht"); }
   gfx->drawFastHLine(0, 44, 320, C_DIM);
 #endif
 }
@@ -690,11 +720,12 @@ void updateLeds() {
 void savePrefs() {
   prefs.putUChar("mode", mode); prefs.putInt("wpm", wpm); prefs.putInt("gap", gap10);
   prefs.putInt("lvl", level);   prefs.putInt("vol", volume); prefs.putBool("swap", swapPaddles);
+  prefs.putBool("iamb", iambicB); prefs.putBool("pctone", pcTone);
 }
 
 void setMode(uint8_t m) {
   playStop();
-  mode = m; savePrefs();
+  mode = m; knob = 0; savePrefs();
   clearText(); history = ""; lsCount = 0; ls = LS_START; es = ES_START; esTries = 0; esOk = esTotal = 0;
   if (mode == M_DECODER) decDit = 60;
   hdrDirty = bodyDirty = true;
@@ -711,6 +742,7 @@ void setup() {
   mode = prefs.getUChar("mode", M_KEYER); if (mode >= M_COUNT) mode = M_KEYER;
   wpm = prefs.getInt("wpm", 20); gap10 = prefs.getInt("gap", 20); level = prefs.getInt("lvl", 5);
   volume = prefs.getInt("vol", 6); swapPaddles = prefs.getBool("swap", false);
+  iambicB = prefs.getBool("iamb", true); pcTone = prefs.getBool("pctone", true);
   delay(20);
   if (digitalRead(PIN_DIT) == LOW) { swapPaddles = !swapPaddles; prefs.putBool("swap", swapPaddles); }
 
@@ -738,7 +770,10 @@ void loop() {
   int s = encSteps;
   if (s) {
     encSteps -= s;
-    switch (knob) {
+    KnobList kl = knobList(mode);
+    if (kl.n) switch (kl.k[knob % kl.n]) {
+      case K_IAMBIC: if (s % 2) iambicB = !iambicB; break;
+      case K_PCTONE: if (s % 2) pcTone = !pcTone; break;
       case K_WPM:   wpm    = constrain(wpm + s, WPM_MIN, WPM_MAX); break;
       case K_GAP:   gap10  = constrain(gap10 + s, 10, 40); break;
       case K_LEVEL: level  = constrain(level + s, 1, KOCH_LEN - 1); break;
@@ -750,7 +785,7 @@ void loop() {
   static bool prev = false; static uint32_t at = 0; static bool longDone = false;
   bool b = digitalRead(PIN_ENC_BTN) == LOW;
   if (b && !prev) { at = millis(); longDone = false; }
-  if (b && !longDone && millis() - at > 800) { knob = (knob + 1) % K_COUNT; longDone = true; hdrDirty = true; }
+  if (b && !longDone && millis() - at > 800) { KnobList kl = knobList(mode); if (kl.n) knob = (knob + 1) % kl.n; longDone = true; hdrDirty = true; }
   if (!b && prev && !longDone && millis() - at > 30) setMode((mode + 1) % M_COUNT);
   prev = b;
 
