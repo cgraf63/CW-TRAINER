@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CW-Lernstation</title>
+<title>DitDah Lab</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
@@ -201,66 +201,66 @@ kbd{font-family:var(--f-mono);font-size:12px;padding:1px 6px;border:1px solid va
 </head>
 <body>
 <header class="top">
-  <div class="brand"><span class="logo" aria-hidden="true">-.-. .--</span><h1>CW-Lernstation</h1></div>
+  <div class="brand"><span class="logo" aria-hidden="true">-.-. .--</span><h1>DitDah Lab</h1></div>
   <div class="status">
     <span class="pill" id="st-speed">20 WPM</span>
     <span class="pill" id="st-farn">Farnsworth 12</span>
     <span class="pill" id="st-tone">600 Hz</span>
-    <button class="btn" id="open-settings" type="button">Einstellungen</button>
+    <button class="btn" id="open-settings" type="button"><span data-i18n="settings">Einstellungen</span></button>
   </div>
 </header>
 <nav class="tabs" aria-label="Übungen">
-  <a href="#start">Übersicht</a>
-  <a href="#koch">1 · Koch-Lektion</a>
-  <a href="#reflex">2 · Zeichen-Reflex</a>
-  <a href="#hoeren">3 · Mitschreiben</a>
-  <a href="#geben">4 · Geben</a>
-  <a href="#qso">5 · QSO-Simulator</a>
+  <a href="#start"><span data-i18n="nav_start">Übersicht</span></a>
+  <a href="#koch"><span data-i18n="nav_koch">1 · Koch-Lektion</span></a>
+  <a href="#reflex"><span data-i18n="nav_reflex">2 · Zeichen-Reflex</span></a>
+  <a href="#hoeren"><span data-i18n="nav_hoeren">3 · Mitschreiben</span></a>
+  <a href="#geben"><span data-i18n="nav_geben">4 · Geben</span></a>
+  <a href="#qso"><span data-i18n="nav_qso">5 · QSO-Simulator</span></a>
 </nav>
 
 <main>
 <!-- ÜBERSICHT -->
 <section class="view" id="view-start">
   <div class="vhead">
-    <h2>Dein Lernstand</h2>
-    <p class="muted">Lerne Morsezeichen als Klang, nicht als Punkte und Striche. Die Zeichen kommen immer im vollen Zeichentempo; die Pausen dazwischen werden gedehnt (Farnsworth), bis du schneller wirst. Alles läuft im Browser, dein Fortschritt bleibt auf diesem Gerät.</p>
+    <h2><span data-i18n="start_h">Dein Lernstand</span></h2>
+    <p class="muted"><span data-i18n="start_p">Lerne Morsezeichen als Klang, nicht als Punkte und Striche. Die Zeichen kommen immer im vollen Zeichentempo; die Pausen dazwischen werden gedehnt (Farnsworth), bis du schneller wirst. Alles läuft im Browser, dein Fortschritt bleibt auf diesem Gerät.</span></p>
   </div>
   <div class="tiles">
-    <div class="tile"><span class="lab">Koch-Lektion</span><span class="val" id="t-level">1</span><span class="small muted" id="t-level-sub">2 von 41 Zeichen</span></div>
-    <div class="tile"><span class="lab">Sichere Zeichen</span><span class="val" id="t-solid">0</span><span class="small muted">≥ 90 % in den letzten 20 Versuchen</span></div>
-    <div class="tile"><span class="lab">Übungszeit heute</span><span class="val" id="t-today">0 min</span><span class="small muted" id="t-week">0 min in 7 Tagen</span></div>
-    <div class="tile"><span class="lab">Letzte 7 Tage</span><svg id="t-spark" viewBox="0 0 140 34" preserveAspectRatio="none" aria-label="Übungsminuten pro Tag"></svg><span class="small muted">Minuten pro Tag</span></div>
+    <div class="tile"><span class="lab"><span data-i18n="tile_level">Koch-Lektion</span></span><span class="val" id="t-level">1</span><span class="small muted" id="t-level-sub">2 von 41 Zeichen</span></div>
+    <div class="tile"><span class="lab"><span data-i18n="tile_solid">Sichere Zeichen</span></span><span class="val" id="t-solid">0</span><span class="small muted"><span data-i18n="tile_solid_sub">≥ 90 % in den letzten 20 Versuchen</span></span></div>
+    <div class="tile"><span class="lab"><span data-i18n="tile_today">Übungszeit heute</span></span><span class="val" id="t-today">0 min</span><span class="small muted" id="t-week">0 min in 7 Tagen</span></div>
+    <div class="tile"><span class="lab"><span data-i18n="tile_week">Letzte 7 Tage</span></span><svg id="t-spark" viewBox="0 0 140 34" preserveAspectRatio="none" aria-label="Übungsminuten pro Tag"></svg><span class="small muted"><span data-i18n="tile_week_sub">Minuten pro Tag</span></span></div>
   </div>
   <div class="card">
     <div class="row" style="justify-content:space-between">
-      <h3>Zeichen in Koch-Reihenfolge</h3>
+      <h3><span data-i18n="grid_h">Zeichen in Koch-Reihenfolge</span></h3>
       <div class="legend">
-        <span style="--sw:var(--good-soft)">sicher</span>
-        <span style="--sw:var(--mid-soft)">fast</span>
-        <span style="--sw:var(--bad-soft)">üben</span>
-        <span style="--sw:var(--surface2)">neu</span>
-        <span style="--sw:var(--line)">gesperrt</span>
+        <span style="--sw:var(--good-soft)"><span data-i18n="lg_solid">sicher</span></span>
+        <span style="--sw:var(--mid-soft)"><span data-i18n="lg_mid">fast</span></span>
+        <span style="--sw:var(--bad-soft)"><span data-i18n="lg_weak">üben</span></span>
+        <span style="--sw:var(--surface2)"><span data-i18n="lg_new">neu</span></span>
+        <span style="--sw:var(--line)"><span data-i18n="lg_locked">gesperrt</span></span>
       </div>
     </div>
     <div class="cgrid" id="cgrid"></div>
-    <p class="small muted">Antippen spielt das Zeichen ab. Die Prozentzahl ist deine Trefferquote aus den letzten 20 Versuchen über alle Übungen.</p>
+    <p class="small muted"><span data-i18n="grid_p">Antippen spielt das Zeichen ab. Die Prozentzahl ist deine Trefferquote aus den letzten 20 Versuchen über alle Übungen.</span></p>
   </div>
-  <h3>Lernpfad</h3>
+  <h3><span data-i18n="path_h">Lernpfad</span></h3>
   <div class="path">
-    <a class="step" href="#koch"><span class="n">01</span><div><b>Koch-Lektion</b><p>Fünfergruppen aus den freigeschalteten Zeichen mitschreiben. Ab 90 % kommt das nächste Zeichen dazu.</p></div></a>
-    <a class="step" href="#reflex"><span class="n">02</span><div><b>Zeichen-Reflex</b><p>Ein Zeichen hören, sofort die Taste drücken. Trainiert das Erkennen ohne Nachdenken.</p></div></a>
-    <a class="step" href="#hoeren"><span class="n">03</span><div><b>Mitschreiben</b><p>Wörter, Abkürzungen, Q-Gruppen und Rufzeichen. Das Tempo passt sich an.</p></div></a>
-    <a class="step" href="#geben"><span class="n">04</span><div><b>Geben</b><p>Mit Leertaste, Strg-Tasten oder Touch-Paddles. Der Decoder zeigt, was ankommt, die Fist-Analyse misst dein Timing.</p></div></a>
-    <a class="step" href="#qso"><span class="n">05</span><div><b>QSO-Simulator</b><p>Auf einen CQ-Ruf antworten und Rufzeichen, Rapport, Name und QTH aufnehmen. Auch als Contest.</p></div></a>
-    <div class="step" style="cursor:default"><span class="n">TIP</span><div><b>15 Minuten täglich</b><p>Kurze, regelmässige Einheiten bringen mehr als eine lange am Wochenende. Zeichentempo 20 WPM oder mehr lassen.</p></div></div>
+    <a class="step" href="#koch"><span class="n">01</span><div data-i18n="step1"><b>Koch-Lektion</b><p>Fünfergruppen aus den freigeschalteten Zeichen mitschreiben. Ab 90 % kommt das nächste Zeichen dazu.</p></div></a>
+    <a class="step" href="#reflex"><span class="n">02</span><div data-i18n="step2"><b>Zeichen-Reflex</b><p>Ein Zeichen hören, sofort die Taste drücken. Trainiert das Erkennen ohne Nachdenken.</p></div></a>
+    <a class="step" href="#hoeren"><span class="n">03</span><div data-i18n="step3"><b>Mitschreiben</b><p>Wörter, Abkürzungen, Q-Gruppen und Rufzeichen. Das Tempo passt sich an.</p></div></a>
+    <a class="step" href="#geben"><span class="n">04</span><div data-i18n="step4"><b>Geben</b><p>Mit Leertaste, Strg-Tasten oder Touch-Paddles. Der Decoder zeigt, was ankommt, die Fist-Analyse misst dein Timing.</p></div></a>
+    <a class="step" href="#qso"><span class="n">05</span><div data-i18n="step5"><b>QSO-Simulator</b><p>Auf einen CQ-Ruf antworten und Rufzeichen, Rapport, Name und QTH aufnehmen. Auch als Contest.</p></div></a>
+    <div class="step" style="cursor:default"><span class="n">TIP</span><div data-i18n="step6"><b>15 Minuten täglich</b><p>Kurze, regelmässige Einheiten bringen mehr als eine lange am Wochenende. Zeichentempo 20 WPM oder mehr lassen.</p></div></div>
   </div>
 </section>
 
 <!-- KOCH -->
 <section class="view" id="view-koch">
   <div class="vhead">
-    <h2>Koch-Lektion <span id="k-lev" class="mono">1</span></h2>
-    <p class="muted">Du hörst Gruppen aus den freigeschalteten Zeichen und tippst mit, was du hörst. Unbekanntes einfach überspringen. Nach der Lektion wird bei mindestens 90 % das nächste Zeichen freigeschaltet.</p>
+    <h2><span data-i18n="koch_h">Koch-Lektion</span> <span id="k-lev" class="mono">1</span></h2>
+    <p class="muted"><span data-i18n="koch_p">Du hörst Gruppen aus den freigeschalteten Zeichen und tippst mit, was du hörst. Unbekanntes einfach überspringen. Nach der Lektion wird bei mindestens 90 % das nächste Zeichen freigeschaltet.</span></p>
   </div>
   <div class="grid2">
     <div class="card">
@@ -269,31 +269,31 @@ kbd{font-family:var(--f-mono);font-size:12px;padding:1px 6px;border:1px solid va
       </div>
       <div class="bar" aria-hidden="true"><i id="k-bar"></i></div>
       <div class="row small muted" style="justify-content:space-between"><span id="k-prog">Gruppe 0 von 20</span><span id="k-acc">–</span></div>
-      <label class="f" for="k-input">Mitschrift der aktuellen Gruppe
-        <input id="k-input" class="big-input" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" disabled placeholder="Start drücken">
+      <label class="f" for="k-input"><span data-i18n="koch_input">Mitschrift der aktuellen Gruppe</span>
+        <input id="k-input" class="big-input" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" disabled placeholder="Start drücken" data-i18n-ph="ph_start">
       </label>
       <div class="row">
-        <button class="btn primary" id="k-start" type="button">Lektion starten</button>
-        <button class="btn" id="k-replay" type="button" disabled>Gruppe wiederholen</button>
-        <button class="btn ghost" id="k-stop" type="button" disabled>Abbrechen</button>
+        <button class="btn primary" id="k-start" type="button"><span data-i18n="koch_start">Lektion starten</span></button>
+        <button class="btn" id="k-replay" type="button" disabled><span data-i18n="koch_replay">Gruppe wiederholen</span></button>
+        <button class="btn ghost" id="k-stop" type="button" disabled><span data-i18n="cancel">Abbrechen</span></button>
       </div>
       <div id="k-result"></div>
       <div class="log" id="k-log" aria-live="polite"></div>
     </div>
     <div class="card">
-      <h3>Neues Zeichen</h3>
+      <h3><span data-i18n="koch_new">Neues Zeichen</span></h3>
       <div class="row"><span class="chip new" id="k-new" style="font-size:22px;height:52px;min-width:52px">M</span><span class="mono" id="k-newpat" style="font-size:22px;letter-spacing:.2em">--</span></div>
-      <button class="btn" id="k-hearnew" type="button">Neues Zeichen 3× anhören</button>
+      <button class="btn" id="k-hearnew" type="button"><span data-i18n="koch_hear">Neues Zeichen 3× anhören</span></button>
       <div class="row">
-        <button class="btn" id="k-down" type="button">Lektion zurück</button>
-        <button class="btn" id="k-up" type="button">Lektion vor</button>
+        <button class="btn" id="k-down" type="button"><span data-i18n="koch_down">Lektion zurück</span></button>
+        <button class="btn" id="k-up" type="button"><span data-i18n="koch_up">Lektion vor</span></button>
       </div>
       <dl class="kv">
-        <dt>Gruppen pro Lektion</dt><dd id="k-s-groups">20</dd>
-        <dt>Zeichen pro Gruppe</dt><dd id="k-s-group">5</dd>
-        <dt>Zeichen/Effektiv</dt><dd id="k-s-speed">20/12 WPM</dd>
+        <dt><span data-i18n="groups_per">Gruppen pro Lektion</span></dt><dd id="k-s-groups">20</dd>
+        <dt><span data-i18n="chars_per">Zeichen pro Gruppe</span></dt><dd id="k-s-group">5</dd>
+        <dt><span data-i18n="char_eff">Zeichen/Effektiv</span></dt><dd id="k-s-speed">20/12 WPM</dd>
       </dl>
-      <p class="note">Schwache Zeichen kommen häufiger vor. Das neueste Zeichen wird ebenfalls bevorzugt.</p>
+      <p class="note"><span data-i18n="koch_note">Schwache Zeichen kommen häufiger vor. Das neueste Zeichen wird ebenfalls bevorzugt.</span></p>
     </div>
   </div>
 </section>
@@ -301,38 +301,38 @@ kbd{font-family:var(--f-mono);font-size:12px;padding:1px 6px;border:1px solid va
 <!-- REFLEX -->
 <section class="view" id="view-reflex">
   <div class="vhead">
-    <h2>Zeichen-Reflex</h2>
-    <p class="muted">Ein einzelnes Zeichen erklingt, du drückst so schnell wie möglich die passende Taste. Gemessen wird ab dem Ende des Zeichens. Ziel: unter 500 ms, ohne zu zählen.</p>
+    <h2><span data-i18n="rx_h">Zeichen-Reflex</span></h2>
+    <p class="muted"><span data-i18n="rx_p">Ein einzelnes Zeichen erklingt, du drückst so schnell wie möglich die passende Taste. Gemessen wird ab dem Ende des Zeichens. Ziel: unter 500 ms, ohne zu zählen.</span></p>
   </div>
   <div class="grid2">
     <div class="card">
       <div class="row">
-        <label class="f" for="rx-set">Zeichenvorrat
-          <select id="rx-set"><option value="koch">Freigeschaltete Koch-Zeichen</option><option value="letters">Alle Buchstaben</option><option value="all">Buchstaben, Ziffern, Satzzeichen</option></select>
+        <label class="f" for="rx-set"><span data-i18n="rx_set">Zeichenvorrat</span>
+          <select id="rx-set"><option value="koch" data-i18n="rx_o_koch">Freigeschaltete Koch-Zeichen</option><option value="letters" data-i18n="rx_o_letters">Alle Buchstaben</option><option value="all" data-i18n="rx_o_all">Buchstaben, Ziffern, Satzzeichen</option></select>
         </label>
-        <label class="f" for="rx-n">Anzahl
+        <label class="f" for="rx-n"><span data-i18n="rx_n">Anzahl</span>
           <select id="rx-n"><option>20</option><option selected>30</option><option>50</option></select>
         </label>
       </div>
       <div class="bigchar" id="rx-big" aria-live="polite">·</div>
-      <div class="bigpat" id="rx-pat">Tastatur bereit halten</div>
+      <div class="bigpat" id="rx-pat" data-i18n="rx_ready">Tastatur bereit halten</div>
       <div class="bar"><i id="rx-bar"></i></div>
       <div class="row">
         <button class="btn primary" id="rx-start" type="button">Start</button>
-        <button class="btn ghost" id="rx-stop" type="button" disabled>Abbrechen</button>
+        <button class="btn ghost" id="rx-stop" type="button" disabled><span data-i18n="cancel">Abbrechen</span></button>
       </div>
       <div id="rx-result"></div>
     </div>
     <div class="card">
-      <h3>Diese Runde</h3>
+      <h3><span data-i18n="rx_round">Diese Runde</span></h3>
       <dl class="kv">
-        <dt>Zeichen</dt><dd id="rx-k-n">0 / 30</dd>
-        <dt>Treffer</dt><dd id="rx-k-hit">–</dd>
-        <dt>Median Reaktion</dt><dd id="rx-k-med">–</dd>
-        <dt>Bestwert Median</dt><dd id="rx-k-best">–</dd>
+        <dt><span data-i18n="rx_chars">Zeichen</span></dt><dd id="rx-k-n">0 / 30</dd>
+        <dt><span data-i18n="rx_hits">Treffer</span></dt><dd id="rx-k-hit">–</dd>
+        <dt><span data-i18n="rx_med">Median Reaktion</span></dt><dd id="rx-k-med">–</dd>
+        <dt><span data-i18n="rx_best">Bestwert Median</span></dt><dd id="rx-k-best">–</dd>
       </dl>
-      <h3>Langsamste Zeichen</h3>
-      <div class="chips" id="rx-slow"><span class="small muted">Noch keine Daten</span></div>
+      <h3><span data-i18n="rx_slow">Langsamste Zeichen</span></h3>
+      <div class="chips" id="rx-slow"><span class="small muted"><span data-i18n="nodata">Noch keine Daten</span></span></div>
     </div>
   </div>
 </section>
@@ -340,45 +340,45 @@ kbd{font-family:var(--f-mono);font-size:12px;padding:1px 6px;border:1px solid va
 <!-- MITSCHREIBEN -->
 <section class="view" id="view-hoeren">
   <div class="vhead">
-    <h2>Mitschreiben</h2>
-    <p class="muted">Hören, tippen, <kbd>Enter</kbd>. Ein leeres Feld mit <kbd>Enter</kbd> spielt nochmals ab. Mit Tempo-Anpassung steigt die Geschwindigkeit nach jedem Treffer um 1 WPM und sinkt bei einem Fehler.</p>
+    <h2><span data-i18n="h_h">Mitschreiben</span></h2>
+    <p class="muted" data-i18n="h_p">Hören, tippen, <kbd>Enter</kbd>. Ein leeres Feld mit <kbd>Enter</kbd> spielt nochmals ab. Mit Tempo-Anpassung steigt die Geschwindigkeit nach jedem Treffer um 1 WPM und sinkt bei einem Fehler.</p>
   </div>
   <div class="grid2">
     <div class="card">
       <div class="row">
-        <label class="f" for="h-src">Übungsstoff
+        <label class="f" for="h-src"><span data-i18n="h_src">Übungsstoff</span>
           <select id="h-src">
-            <option value="abk">CW-Abkürzungen</option>
-            <option value="q">Q-Gruppen</option>
-            <option value="calls">Rufzeichen</option>
-            <option value="woerter">Deutsche Wörter</option>
-            <option value="zahlen">Zahlen und Rapporte</option>
-            <option value="eigen">Eigene Liste</option>
+            <option value="abk" data-i18n="h_o_abk">CW-Abkürzungen</option>
+            <option value="q" data-i18n="h_o_q">Q-Gruppen</option>
+            <option value="calls" data-i18n="h_o_calls">Rufzeichen</option>
+            <option value="woerter" data-i18n="h_o_words">Deutsche Wörter</option>
+            <option value="zahlen" data-i18n="h_o_num">Zahlen und Rapporte</option>
+            <option value="eigen" data-i18n="h_o_own">Eigene Liste</option>
           </select>
         </label>
-        <label class="f" for="h-adapt" style="flex-direction:row;align-items:center;gap:8px;margin-top:18px"><input id="h-adapt" type="checkbox" checked> Tempo anpassen</label>
+        <label class="f" for="h-adapt" style="flex-direction:row;align-items:center;gap:8px;margin-top:18px"><input id="h-adapt" type="checkbox" checked> <span data-i18n="h_adapt">Tempo anpassen</span></label>
       </div>
-      <label class="f" for="h-own" id="h-own-wrap" style="display:none">Eigene Liste (durch Leerzeichen oder Zeilen getrennt)
+      <label class="f" for="h-own" id="h-own-wrap" style="display:none"><span data-i18n="h_own">Eigene Liste (durch Leerzeichen oder Zeilen getrennt)</span>
         <textarea id="h-own" spellcheck="false">HB9 FUNK ANTENNE DIPOL 73 QRP</textarea>
       </label>
-      <label class="f" for="h-input">Mitschrift
-        <input id="h-input" class="big-input" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Start drücken">
+      <label class="f" for="h-input"><span data-i18n="h_input">Mitschrift</span>
+        <input id="h-input" class="big-input" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Start drücken" data-i18n-ph="ph_start">
       </label>
       <div class="row">
         <button class="btn primary" id="h-start" type="button">Start</button>
-        <button class="btn" id="h-replay" type="button">Nochmal hören</button>
-        <button class="btn ghost" id="h-reveal" type="button">Auflösen</button>
+        <button class="btn" id="h-replay" type="button"><span data-i18n="h_replay">Nochmal hören</span></button>
+        <button class="btn ghost" id="h-reveal" type="button"><span data-i18n="h_reveal">Auflösen</span></button>
       </div>
       <div id="h-fb" aria-live="polite"></div>
     </div>
     <div class="card">
       <div class="score">
-        <div><b id="h-wpm">20</b><small>WPM jetzt</small></div>
-        <div><b id="h-pts">0</b><small>Punkte</small></div>
-        <div><b id="h-streak">0</b><small>Serie</small></div>
-        <div><b id="h-rate">–</b><small>Trefferquote</small></div>
+        <div><b id="h-wpm">20</b><small><span data-i18n="h_wpm">WPM jetzt</span></small></div>
+        <div><b id="h-pts">0</b><small><span data-i18n="h_pts">Punkte</span></small></div>
+        <div><b id="h-streak">0</b><small><span data-i18n="h_streak">Serie</span></small></div>
+        <div><b id="h-rate">–</b><small><span data-i18n="h_rate">Trefferquote</span></small></div>
       </div>
-      <h3>Zuletzt</h3>
+      <h3><span data-i18n="h_recent">Zuletzt</span></h3>
       <div class="log" id="h-log"></div>
     </div>
   </div>
@@ -387,35 +387,35 @@ kbd{font-family:var(--f-mono);font-size:12px;padding:1px 6px;border:1px solid va
 <!-- GEBEN -->
 <section class="view" id="view-geben">
   <div class="vhead">
-    <h2>Geben</h2>
-    <p class="muted">Handtaste: <kbd>Leertaste</kbd>. Paddle: <kbd>Strg links</kbd> oder <kbd>J</kbd> für Punkt, <kbd>Strg rechts</kbd> oder <kbd>K</kbd> für Strich. Ein echtes Paddle schliesst du über ein USB-Interface an, das diese Strg-Tasten sendet: ein vBand- oder Vail-Adapter oder ein selbstgebauter ESP32-S3. Auf Handy und Tablet erscheinen unten Tastenflächen zum Antippen. Der kleine Punkt neben dem Muster zeigt, wann die Taste gedrückt ist.</p>
+    <h2><span data-i18n="g_h">Geben</span></h2>
+    <p class="muted" data-i18n="g_p">Handtaste: <kbd>Leertaste</kbd>. Paddle: <kbd>Strg links</kbd> oder <kbd>J</kbd> für Punkt, <kbd>Strg rechts</kbd> oder <kbd>K</kbd> für Strich. Ein echtes Paddle schliesst du über ein USB-Interface an, das diese Strg-Tasten sendet: ein vBand- oder Vail-Adapter oder ein selbstgebauter ESP32-S3. Auf Handy und Tablet erscheinen unten Tastenflächen zum Antippen. Der kleine Punkt neben dem Muster zeigt, wann die Taste gedrückt ist.</p>
   </div>
   <div class="grid2">
     <div class="card">
       <div class="row">
-        <label class="f" for="g-mode">Taste
-          <select id="g-mode"><option value="straight">Handtaste</option><option value="A">Paddle, Iambic A</option><option value="B">Paddle, Iambic B</option></select>
+        <label class="f" for="g-mode"><span data-i18n="g_mode">Taste</span>
+          <select id="g-mode"><option value="straight" data-i18n="g_o_straight">Handtaste</option><option value="A">Paddle, Iambic A</option><option value="B">Paddle, Iambic B</option></select>
         </label>
-        <label class="f" for="g-tgt">Übungstext
-          <select id="g-tgt"><option value="none">Frei geben</option><option value="koch">Koch-Gruppe</option><option value="abk">Abkürzung</option><option value="woerter">Wort</option><option value="calls">Rufzeichen</option></select>
+        <label class="f" for="g-tgt"><span data-i18n="g_tgt">Übungstext</span>
+          <select id="g-tgt"><option value="none" data-i18n="g_o_none">Frei geben</option><option value="koch" data-i18n="g_o_koch">Koch-Gruppe</option><option value="abk" data-i18n="g_o_abk">Abkürzung</option><option value="woerter" data-i18n="g_o_word">Wort</option><option value="calls" data-i18n="g_o_call">Rufzeichen</option></select>
         </label>
-        <button class="btn" id="g-newtgt" type="button" style="margin-top:18px">Neuer Text</button>
-        <button class="btn" id="g-heartgt" type="button" style="margin-top:18px">Vorspielen</button>
+        <button class="btn" id="g-newtgt" type="button" style="margin-top:18px"><span data-i18n="g_new">Neuer Text</span></button>
+        <button class="btn" id="g-heartgt" type="button" style="margin-top:18px"><span data-i18n="g_play">Vorspielen</span></button>
       </div>
       <div class="target" id="g-target" aria-live="polite"></div>
       <div class="row" style="justify-content:space-between"><div class="row"><span class="lamp" id="g-lamp"></span><span class="curpat" id="g-pat"></span></div><span class="pill" id="g-est">– WPM</span></div>
       <div class="decoded" id="g-out"><span class="cursor"></span></div>
-      <div class="row"><button class="btn" id="g-clear" type="button">Text löschen</button><span class="small muted" id="g-hint">Klicke einmal in die Seite, damit der Ton freigegeben wird.</span></div>
+      <div class="row"><button class="btn" id="g-clear" type="button"><span data-i18n="g_clear">Text löschen</span></button><span class="small muted" id="g-hint" data-i18n="g_hint">Klicke einmal in die Seite, damit der Ton freigegeben wird.</span></div>
       <div class="pads" id="g-pads"></div>
     </div>
     <div class="card fist">
-      <div class="row" style="justify-content:space-between"><h3>Fist-Analyse</h3><button class="btn ghost small" id="g-freset" type="button">Zurücksetzen</button></div>
+      <div class="row" style="justify-content:space-between"><h3><span data-i18n="g_fist">Fist-Analyse</span></h3><button class="btn ghost small" id="g-freset" type="button"><span data-i18n="reset">Zurücksetzen</span></button></div>
       <p class="small muted" id="g-fnote">Misst dein Handtasten-Timing im Verhältnis zur Punktlänge. Mindestens 10 Elemente geben.</p>
       <dl class="kv" id="g-fist"></dl>
     </div>
   </div>
   <div class="card">
-    <div class="row" style="justify-content:space-between"><h3>Morsebaum</h3><span class="small muted">Punkt nach links, Strich nach rechts. Knoten anklicken zum Anhören.</span></div>
+    <div class="row" style="justify-content:space-between"><h3><span data-i18n="g_tree">Morsebaum</span></h3><span class="small muted"><span data-i18n="g_tree_p">Punkt nach links, Strich nach rechts. Knoten anklicken zum Anhören.</span></span></div>
     <div class="treewrap"><svg class="tree" id="tree" viewBox="0 0 960 346" role="img" aria-label="Morsebaum"></svg></div>
   </div>
 </section>
@@ -423,29 +423,29 @@ kbd{font-family:var(--f-mono);font-size:12px;padding:1px 6px;border:1px solid va
 <!-- QSO -->
 <section class="view" id="view-qso">
   <div class="vhead">
-    <h2>QSO-Simulator</h2>
-    <p class="muted">Eine Station ruft CQ. Schreib ihr Rufzeichen mit, antworte, und nimm danach die Angaben aus ihrem Durchgang auf. Dein eigenes Rufzeichen stellst du in den Einstellungen ein.</p>
+    <h2><span data-i18n="q_h">QSO-Simulator</span></h2>
+    <p class="muted"><span data-i18n="q_p">Eine Station ruft CQ. Schreib ihr Rufzeichen mit, antworte, und nimm danach die Angaben aus ihrem Durchgang auf. Dein eigenes Rufzeichen stellst du in den Einstellungen ein.</span></p>
   </div>
   <div class="grid2">
     <div class="card">
       <div class="row">
-        <label class="f" for="q-type">Art
-          <select id="q-type"><option value="rag">Normales QSO</option><option value="test">Contest</option><option value="pota">Park-Aktivierung (POTA)</option></select>
+        <label class="f" for="q-type"><span data-i18n="q_type">Art</span>
+          <select id="q-type"><option value="rag" data-i18n="q_o_rag">Normales QSO</option><option value="test">Contest</option><option value="pota" data-i18n="q_o_pota">Park-Aktivierung (POTA)</option></select>
         </label>
-        <label class="f" for="q-cut" style="flex-direction:row;align-items:center;gap:8px;margin-top:18px"><input id="q-cut" type="checkbox"> Kurzziffern (T = 0, N = 9)</label>
+        <label class="f" for="q-cut" style="flex-direction:row;align-items:center;gap:8px;margin-top:18px"><input id="q-cut" type="checkbox"> <span data-i18n="q_cut">Kurzziffern (T = 0, N = 9)</span></label>
       </div>
-      <div class="row"><span class="pill" id="q-phase">Bereit</span><span class="small muted" id="q-hint">Start drücken, dann zuhören.</span></div>
+      <div class="row"><span class="pill" id="q-phase" data-i18n="q_ready">Bereit</span><span class="small muted" id="q-hint" data-i18n="q_hint0">Start drücken, dann zuhören.</span></div>
       <div class="fields" id="q-fields"></div>
       <div class="row">
-        <button class="btn primary" id="q-go" type="button">QSO starten</button>
-        <button class="btn" id="q-replay" type="button" disabled>Durchgang wiederholen</button>
+        <button class="btn primary" id="q-go" type="button" data-i18n="q_start">QSO starten</button>
+        <button class="btn" id="q-replay" type="button" disabled><span data-i18n="q_replay">Durchgang wiederholen</span></button>
       </div>
       <div id="q-result"></div>
     </div>
     <div class="card">
-      <h3>Protokoll</h3>
-      <div class="transcript" id="q-log"><span class="small muted">Hier erscheint der Verlauf, sobald ein Durchgang ausgewertet ist.</span></div>
-      <dl class="kv"><dt>QSOs</dt><dd id="q-count">0</dd><dt>Felder richtig</dt><dd id="q-rate">–</dd></dl>
+      <h3><span data-i18n="q_log">Protokoll</span></h3>
+      <div class="transcript" id="q-log"><span class="small muted"><span data-i18n="q_log_p">Hier erscheint der Verlauf, sobald ein Durchgang ausgewertet ist.</span></span></div>
+      <dl class="kv"><dt>QSOs</dt><dd id="q-count">0</dd><dt><span data-i18n="q_rate">Felder richtig</span></dt><dd id="q-rate">–</dd></dl>
     </div>
   </div>
 </section>
@@ -453,26 +453,30 @@ kbd{font-family:var(--f-mono);font-size:12px;padding:1px 6px;border:1px solid va
 
 <div class="shade" id="shade"></div>
 <aside class="drawer" id="drawer" aria-label="Einstellungen">
-  <div class="row" style="justify-content:space-between"><h2>Einstellungen</h2><button class="btn" id="close-settings" type="button">Fertig</button></div>
-  <div class="f"><span>Farbschema</span><div class="swatches" role="group" aria-label="Farbschema">
-    <button type="button" class="swatch" data-acc="petrol" style="--sw:#0b6e75"><i></i>Petrol</button>
-    <button type="button" class="swatch" data-acc="gruen" style="--sw:#2b7a3d"><i></i>Grün</button>
-    <button type="button" class="swatch" data-acc="orange" style="--sw:#f5992e"><i style="box-shadow:0 0 0 3px #2b2e32"></i>Orange (anthrazit)</button>
+  <div class="row" style="justify-content:space-between"><h2><span data-i18n="settings">Einstellungen</span></h2><button class="btn" id="close-settings" type="button"><span data-i18n="done">Fertig</span></button></div>
+  <div class="f"><span data-i18n="lang">Sprache</span><div class="swatches" role="group" aria-label="Sprache / Language">
+    <button type="button" class="swatch langbtn" data-lang="de">Deutsch</button>
+    <button type="button" class="swatch langbtn" data-lang="en">English</button>
   </div></div>
-  <div class="f"><label for="s-wpm">Zeichentempo (WPM)</label><div class="rng"><input id="s-wpm" type="range" min="5" max="45"><output id="o-wpm"></output></div></div>
-  <div class="f"><label for="s-eff">Effektives Tempo, Farnsworth (WPM)</label><div class="rng"><input id="s-eff" type="range" min="3" max="45"><output id="o-eff"></output></div></div>
-  <div class="f"><label for="s-tone">Tonhöhe (Hz)</label><div class="rng"><input id="s-tone" type="range" min="400" max="1000" step="10"><output id="o-tone"></output></div></div>
-  <div class="f"><label for="s-vol">Lautstärke</label><div class="rng"><input id="s-vol" type="range" min="0" max="1" step="0.05"><output id="o-vol"></output></div></div>
+  <div class="f"><span data-i18n="scheme">Farbschema</span><div class="swatches" role="group" aria-label="Farbschema">
+    <button type="button" class="swatch" data-acc="petrol" style="--sw:#0b6e75"><i></i>Petrol</button>
+    <button type="button" class="swatch" data-acc="gruen" style="--sw:#2b7a3d"><i></i><span data-i18n="sc_green">Grün</span></button>
+    <button type="button" class="swatch" data-acc="orange" style="--sw:#f5992e"><i style="box-shadow:0 0 0 3px #2b2e32"></i><span data-i18n="sc_orange">Orange (anthrazit)</span></button>
+  </div></div>
+  <div class="f"><label for="s-wpm"><span data-i18n="s_wpm">Zeichentempo (WPM)</span></label><div class="rng"><input id="s-wpm" type="range" min="5" max="45"><output id="o-wpm"></output></div></div>
+  <div class="f"><label for="s-eff"><span data-i18n="s_eff">Effektives Tempo, Farnsworth (WPM)</span></label><div class="rng"><input id="s-eff" type="range" min="3" max="45"><output id="o-eff"></output></div></div>
+  <div class="f"><label for="s-tone"><span data-i18n="s_tone">Tonhöhe (Hz)</span></label><div class="rng"><input id="s-tone" type="range" min="400" max="1000" step="10"><output id="o-tone"></output></div></div>
+  <div class="f"><label for="s-vol"><span data-i18n="s_vol">Lautstärke</span></label><div class="rng"><input id="s-vol" type="range" min="0" max="1" step="0.05"><output id="o-vol"></output></div></div>
   <div class="row">
-    <label class="f" for="s-group">Zeichen pro Gruppe<select id="s-group"><option>3</option><option>4</option><option>5</option><option>6</option></select></label>
-    <label class="f" for="s-groups">Gruppen pro Lektion<select id="s-groups"><option>10</option><option>20</option><option>30</option><option>50</option></select></label>
+    <label class="f" for="s-group"><span data-i18n="chars_per">Zeichen pro Gruppe</span><select id="s-group"><option>3</option><option>4</option><option>5</option><option>6</option></select></label>
+    <label class="f" for="s-groups"><span data-i18n="groups_per">Gruppen pro Lektion</span><select id="s-groups"><option>10</option><option>20</option><option>30</option><option>50</option></select></label>
   </div>
-  <label class="f" for="s-call">Eigenes Rufzeichen<input id="s-call" type="text" maxlength="12" class="mono" style="text-transform:uppercase"></label>
-  <label class="f" for="s-side" style="flex-direction:row;align-items:center;gap:8px"><input id="s-side" type="checkbox"> Mithörton im Browser beim Geben</label>
-  <p class="small muted">Ausschalten, wenn dein Tasten-Interface selbst einen Summer hat. Der lokale Ton hat keine Verzögerung.</p>
-  <button class="btn" id="s-test" type="button">Ton testen</button>
-  <p class="note">Faustregel: Zeichentempo nicht unter 18 bis 20 WPM. Wenn das zu schnell ist, senke das effektive Tempo. So lernst du den Klang jedes Zeichens, statt Punkte zu zählen.</p>
-  <button class="btn ghost" id="s-reset" type="button">Fortschritt löschen</button>
+  <label class="f" for="s-call"><span data-i18n="s_call">Eigenes Rufzeichen</span><input id="s-call" type="text" maxlength="12" class="mono" style="text-transform:uppercase"></label>
+  <label class="f" for="s-side" style="flex-direction:row;align-items:center;gap:8px"><input id="s-side" type="checkbox"> <span data-i18n="s_side">Mithörton im Browser beim Geben</span></label>
+  <p class="small muted"><span data-i18n="s_side_p">Ausschalten, wenn dein Tasten-Interface selbst einen Summer hat. Der lokale Ton hat keine Verzögerung.</span></p>
+  <button class="btn" id="s-test" type="button"><span data-i18n="s_test">Ton testen</span></button>
+  <p class="note"><span data-i18n="s_note">Faustregel: Zeichentempo nicht unter 18 bis 20 WPM. Wenn das zu schnell ist, senke das effektive Tempo. So lernst du den Klang jedes Zeichens, statt Punkte zu zählen.</span></p>
+  <button class="btn ghost" id="s-reset" type="button" data-i18n="s_reset">Fortschritt löschen</button>
   <p class="small muted" id="s-reset-msg"></p>
 </aside>
 
@@ -496,9 +500,12 @@ const pat=u=>PROS[u]||MORSE[u]||'';
 const pretty=p=>p.replace(/\./g,'·').replace(/-/g,'–');
 function tokenize(t){return (t.toUpperCase().match(/<[A-Z]{2}>|\s+|./g)||[]).map(u=>/^\s+$/.test(u)?' ':u);}
 
+const L=(de,en)=>S.lang==='en'?en:de;
+const tr=a=>Array.isArray(a)?(S.lang==='en'?a[1]:a[0]):a;
+const EN_WORDS='RADIO WAVE ANTENNA KEY MORSE SHORT LONG HILL VALLEY LAKE HOUSE TREE WOOD WIND RAIN SUN MOON STAR NIGHT DAY EVENING MORNING TIME YEAR WEEK TODAY GOOD FAST QUIET LOUD HELLO THANKS PLEASE FRIEND NAME CITY LAND TRAIN LETTER CARD NUMBER WORD BAND WIRE MAST EARTH POWER CRYSTAL COIL RELAY CABLE PLUG COFFEE BREAD MILK FOUR SEVEN TEN UP DOWN LEFT RIGHT CLEAR YES NO OR AND WITH ALSO STILL ALWAYS WEATHER DIPOLE'.split(' ');
 const DE_WORDS='FUNK WELLE ANTENNE SENDER EMPFANG TASTE MORSE KURZ LANG BERG TAL SEE HAUS BAUM WALD WIND REGEN SONNE MOND STERN NACHT TAG ABEND MORGEN ZEIT JAHR WOCHE HEUTE GUT SCHNELL LEISE LAUT HALLO DANKE BITTE GRUSS FREUND NAME STADT LAND ZUG BAHN BRIEF KARTE ZAHL WORT SATZ BAND DRAHT MAST ERDE STROM QUARZ SPULE RELAIS KABEL STECKER KAFFEE BROT MILCH VIER SIEBEN ZEHN OBEN UNTEN LINKS RECHTS KLAR JA NEIN ODER UND MIT OHNE AUCH NOCH SCHON IMMER WETTER DIPOL'.split(' ');
-const ABK={CQ:'allgemeiner Anruf',DE:'von',K:'bitte kommen',TNX:'danke',TU:'danke',FB:'sehr gut',OM:'Funker',YL:'Funkerin',UR:'dein, deine',HR:'hier',WX:'Wetter',ANT:'Antenne',RIG:'Funkgerät',PWR:'Sendeleistung',HW:'wie hörst du mich?',CPY:'mitschreiben, aufnehmen',AGN:'nochmals',PSE:'bitte',ES:'und',GM:'guten Morgen',GA:'guten Tag',GE:'guten Abend',GN:'gute Nacht',DR:'liebe, lieber',CUL:'bis später',BK:'Gegenschreiben, Übergabe',SRI:'Entschuldigung',NR:'Nummer',FER:'für',WID:'mit',73:'beste Grüsse',88:'Liebe und Küsse',RST:'Rapport: Lesbarkeit, Stärke, Ton',OP:'Operator',ABT:'ungefähr',GL:'viel Glück',HPE:'hoffe',VY:'sehr',WKD:'gearbeitet',TEST:'Contest-Anruf','5NN':'599 in Kurzziffern',AR:'Ende der Nachricht',SK:'Ende der Verbindung'};
-const QC={QTH:'Standort',QRZ:'Wer ruft mich?',QSL:'Empfang bestätigt',QRM:'Störung durch andere Stationen',QRN:'atmosphärische Störungen',QSB:'Schwund, Fading',QRS:'langsamer geben',QRQ:'schneller geben',QRP:'kleine Leistung',QRO:'Leistung erhöhen',QSY:'Frequenz wechseln',QRT:'Sendebetrieb einstellen',QRV:'bereit',QSO:'Funkverbindung',QRL:'Ist die Frequenz belegt?',QRX:'bitte warten',QSK:'Mithören zwischen den Zeichen',QRG:'genaue Frequenz',QRU:'nichts für dich',QSP:'Nachricht weiterleiten'};
+const ABK={"CQ": ["allgemeiner Anruf", "general call"], "DE": ["von", "from"], "K": ["bitte kommen", "over, go ahead"], "TNX": ["danke", "thanks"], "TU": ["danke", "thank you"], "FB": ["sehr gut", "fine business, very good"], "OM": ["Funker", "old man, operator"], "YL": ["Funkerin", "young lady, female operator"], "UR": ["dein, deine", "your"], "HR": ["hier", "here"], "WX": ["Wetter", "weather"], "ANT": ["Antenne", "antenna"], "RIG": ["Funkgerät", "radio"], "PWR": ["Sendeleistung", "power"], "HW": ["wie hörst du mich?", "how do you copy?"], "CPY": ["mitschreiben, aufnehmen", "copy"], "AGN": ["nochmals", "again"], "PSE": ["bitte", "please"], "ES": ["und", "and"], "GM": ["guten Morgen", "good morning"], "GA": ["guten Tag", "good afternoon"], "GE": ["guten Abend", "good evening"], "GN": ["gute Nacht", "good night"], "DR": ["liebe, lieber", "dear"], "CUL": ["bis später", "see you later"], "BK": ["Gegenschreiben, Übergabe", "break, back to you"], "SRI": ["Entschuldigung", "sorry"], "NR": ["Nummer", "number"], "FER": ["für", "for"], "WID": ["mit", "with"], "73": ["beste Grüsse", "best regards"], "88": ["Liebe und Küsse", "love and kisses"], "RST": ["Rapport: Lesbarkeit, Stärke, Ton", "report: readability, strength, tone"], "OP": ["Operator", "operator"], "ABT": ["ungefähr", "about"], "GL": ["viel Glück", "good luck"], "HPE": ["hoffe", "hope"], "VY": ["sehr", "very"], "WKD": ["gearbeitet", "worked"], "TEST": ["Contest-Anruf", "contest call"], "5NN": ["599 in Kurzziffern", "599 in cut numbers"], "AR": ["Ende der Nachricht", "end of message"], "SK": ["Ende der Verbindung", "end of contact"]};
+const QC={"QTH": ["Standort", "location"], "QRZ": ["Wer ruft mich?", "who is calling me?"], "QSL": ["Empfang bestätigt", "received, confirmed"], "QRM": ["Störung durch andere Stationen", "interference from other stations"], "QRN": ["atmosphärische Störungen", "atmospheric noise"], "QSB": ["Schwund, Fading", "fading"], "QRS": ["langsamer geben", "send slower"], "QRQ": ["schneller geben", "send faster"], "QRP": ["kleine Leistung", "low power"], "QRO": ["Leistung erhöhen", "increase power"], "QSY": ["Frequenz wechseln", "change frequency"], "QRT": ["Sendebetrieb einstellen", "stop transmitting"], "QRV": ["bereit", "ready"], "QSO": ["Funkverbindung", "contact"], "QRL": ["Ist die Frequenz belegt?", "is the frequency in use?"], "QRX": ["bitte warten", "please wait"], "QSK": ["Mithören zwischen den Zeichen", "break-in, hearing between characters"], "QRG": ["genaue Frequenz", "exact frequency"], "QRU": ["nichts für dich", "nothing for you"], "QSP": ["Nachricht weiterleiten", "relay a message"]};
 const COUNTRIES=[
  {p:['HB9','HB3'],q:['BERN','ZUERICH','BASEL','LUZERN','CHUR','THUN','AARAU','WINTERTHUR']},
  {p:['DL','DK','DJ','DO','DF'],q:['BERLIN','HAMBURG','MUENCHEN','KOELN','DRESDEN','ULM','KIEL','BONN']},
@@ -526,7 +533,7 @@ function genCallInfo(){
 }
 
 /* ---------- Speicher ---------- */
-const DEF={wpm:20,eff:12,tone:600,vol:.6,level:1,group:5,groups:20,call:'HB9XYZ',sideBrowser:true,accent:'petrol'};
+const DEF={wpm:20,eff:12,tone:600,vol:.6,level:1,group:5,groups:20,call:'HB9XYZ',sideBrowser:true,accent:'petrol',lang:(navigator.language||'de').toLowerCase().startsWith('de')?'de':'en'};
 function load(k,d){try{const v=JSON.parse(localStorage.getItem(k)); return v?Object.assign(JSON.parse(JSON.stringify(d)),v):JSON.parse(JSON.stringify(d));}catch(e){return JSON.parse(JSON.stringify(d));}}
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 let S=load('cwl.settings',DEF);
@@ -609,7 +616,7 @@ function sideOff(){ if(!side) return; const t=ctx.currentTime; side.g.gain.cance
 /* ---------- Einstellungen ---------- */
 function refreshStatus(){
   $('#st-speed').textContent=S.wpm+' WPM';
-  $('#st-farn').textContent=S.eff<S.wpm?'Farnsworth '+S.eff:'ohne Farnsworth';
+  $('#st-farn').textContent=S.eff<S.wpm?'Farnsworth '+S.eff:L('ohne Farnsworth','no Farnsworth');
   $('#st-tone').textContent=S.tone+' Hz';
   $('#k-s-groups').textContent=S.groups; $('#k-s-group').textContent=S.group;
   $('#k-s-speed').textContent=S.wpm+'/'+S.eff+' WPM';
@@ -627,13 +634,27 @@ function bindSettings(){
   const applyAcc=()=>{ document.documentElement.setAttribute('data-accent',S.accent); $$('.swatch').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.acc===S.accent))); };
   $$('.swatch').forEach(b=>b.onclick=()=>{ S.accent=b.dataset.acc; saveS(); applyAcc(); });
   applyAcc();
+  $$('.langbtn').forEach(b=>b.onclick=()=>{ S.lang=b.dataset.lang; saveS(); applyLang(); });
   const sd=$('#s-side'); sd.checked=S.sideBrowser; sd.onchange=()=>{S.sideBrowser=sd.checked; saveS(); if(!sd.checked) sideOff();};
   $('#s-test').onclick=()=>play('VVV');
   let armed=false;
-  $('#s-reset').onclick=()=>{ if(!armed){armed=true; $('#s-reset').textContent='Wirklich löschen?'; $('#s-reset-msg').textContent='Nochmals klicken, um Statistik, Lektion und Zeiten zu löschen.'; return;}
-    P={chars:{},days:{},reflexBest:null,qso:{n:0,ok:0,tot:0}}; S.level=1; persist(); saveS(); armed=false; $('#s-reset').textContent='Fortschritt löschen'; $('#s-reset-msg').textContent='Fortschritt gelöscht.'; renderAll(); };
+  $('#s-reset').onclick=()=>{ if(!armed){armed=true; $('#s-reset').textContent=L('Wirklich löschen?','Really reset?'); $('#s-reset-msg').textContent=L('Nochmals klicken, um Statistik, Lektion und Zeiten zu löschen.','Click again to clear statistics, lesson and practice time.'); return;}
+    P={chars:{},days:{},reflexBest:null,qso:{n:0,ok:0,tot:0}}; S.level=1; persist(); saveS(); armed=false; $('#s-reset').textContent=L('Fortschritt löschen','Reset progress'); $('#s-reset-msg').textContent=L('Fortschritt gelöscht.','Progress cleared.'); renderAll(); };
   const open=v=>{$('#drawer').classList.toggle('open',v); $('#shade').classList.toggle('open',v);};
   $('#open-settings').onclick=()=>open(true); $('#close-settings').onclick=()=>open(false); $('#shade').onclick=()=>open(false);
+}
+
+/* ---------- Sprache ---------- */
+const I18N_EN={"settings": "Settings", "nav_start": "Overview", "nav_koch": "1 · Koch lesson", "nav_reflex": "2 · Character reflex", "nav_hoeren": "3 · Copying", "nav_geben": "4 · Sending", "nav_qso": "5 · QSO simulator", "start_h": "Your progress", "start_p": "Learn Morse characters as sounds, not as dots and dashes. Characters always come at full character speed; the gaps between them are stretched (Farnsworth) until you get faster. Everything runs in the browser, and your progress stays on this device.", "tile_level": "Koch lesson", "tile_solid": "Solid characters", "tile_solid_sub": "≥ 90 % in the last 20 attempts", "tile_today": "Practice today", "tile_week": "Last 7 days", "tile_week_sub": "Minutes per day", "grid_h": "Characters in Koch order", "lg_solid": "solid", "lg_mid": "almost", "lg_weak": "practice", "lg_new": "new", "lg_locked": "locked", "grid_p": "Tap a character to hear it. The percentage is your hit rate over the last 20 attempts across all exercises.", "path_h": "Learning path", "step1": "<b>Koch lesson</b><p>Copy groups of five from the unlocked characters. At 90 % the next character is added.</p>", "step2": "<b>Character reflex</b><p>Hear a character, press the key right away. Trains recognition without thinking.</p>", "step3": "<b>Copying</b><p>Words, abbreviations, Q codes and callsigns. The speed adapts to you.</p>", "step4": "<b>Sending</b><p>With the space bar, Ctrl keys or touch paddles. The decoder shows what comes through, the fist analysis measures your timing.</p>", "step5": "<b>QSO simulator</b><p>Answer a CQ call and copy callsign, report, name and QTH. Contest mode too.</p>", "step6": "<b>15 minutes a day</b><p>Short, regular sessions beat one long session at the weekend. Keep the character speed at 20 WPM or more.</p>", "koch_h": "Koch lesson", "koch_p": "You hear groups made of the unlocked characters and type what you hear. Just skip what you don't know. After the lesson, at 90 % or more the next character is unlocked.", "koch_input": "Your copy of the current group", "ph_start": "Press start", "koch_start": "Start lesson", "koch_replay": "Repeat group", "cancel": "Cancel", "koch_new": "New character", "koch_hear": "Play new character 3×", "koch_down": "Previous lesson", "koch_up": "Next lesson", "groups_per": "Groups per lesson", "chars_per": "Characters per group", "char_eff": "Character/effective", "koch_note": "Weak characters come up more often. The newest character is also favoured.", "rx_h": "Character reflex", "rx_p": "A single character sounds and you press the matching key as fast as you can. Timing starts at the end of the character. Goal: under 500 ms, without counting.", "rx_set": "Character set", "rx_o_koch": "Unlocked Koch characters", "rx_o_letters": "All letters", "rx_o_all": "Letters, digits, punctuation", "rx_n": "Count", "rx_ready": "Keep your keyboard ready", "rx_round": "This round", "rx_chars": "Characters", "rx_hits": "Hits", "rx_med": "Median reaction", "rx_best": "Best median", "rx_slow": "Slowest characters", "nodata": "No data yet", "h_h": "Copying", "h_p": "Listen, type, <kbd>Enter</kbd>. <kbd>Enter</kbd> on an empty field plays it again. With adaptive speed, the speed goes up 1 WPM after every hit and drops after a miss.", "h_src": "Material", "h_o_abk": "CW abbreviations", "h_o_q": "Q codes", "h_o_calls": "Callsigns", "h_o_words": "English words", "h_o_num": "Numbers and reports", "h_o_own": "Own list", "h_adapt": "Adapt speed", "h_own": "Own list (separated by spaces or lines)", "h_input": "Your copy", "h_replay": "Play again", "h_reveal": "Reveal", "h_wpm": "WPM now", "h_pts": "Points", "h_streak": "Streak", "h_rate": "Hit rate", "h_recent": "Recent", "g_h": "Sending", "g_p": "Straight key: <kbd>Space</kbd>. Paddle: <kbd>Left Ctrl</kbd> or <kbd>J</kbd> for dit, <kbd>Right Ctrl</kbd> or <kbd>K</kbd> for dah. Connect a real paddle through a USB interface that sends these Ctrl keys: a vBand or Vail adapter or a home-built ESP32-S3. On phones and tablets, touch areas appear below. The small dot next to the pattern shows when the key is down.", "g_mode": "Key", "g_o_straight": "Straight key", "g_tgt": "Practice text", "g_o_none": "Free sending", "g_o_koch": "Koch group", "g_o_abk": "Abbreviation", "g_o_word": "Word", "g_o_call": "Callsign", "g_new": "New text", "g_play": "Play", "g_clear": "Clear text", "g_hint": "Click once on the page to enable sound.", "g_fist": "Fist analysis", "reset": "Reset", "g_tree": "Morse tree", "g_tree_p": "Dit to the left, dah to the right. Click a node to hear it.", "q_h": "QSO simulator", "q_p": "A station calls CQ. Copy its callsign, reply, then copy the details from its over. Set your own callsign in the settings.", "q_type": "Type", "q_o_rag": "Standard QSO", "q_o_pota": "Park activation (POTA)", "q_cut": "Cut numbers (T = 0, N = 9)", "q_ready": "Ready", "q_hint0": "Press start, then listen.", "q_start": "Start QSO", "q_replay": "Repeat over", "q_log": "Log", "q_log_p": "The transcript appears here once an over has been checked.", "q_rate": "Fields correct", "done": "Done", "lang": "Language", "scheme": "Color scheme", "sc_green": "Green", "sc_orange": "Orange (anthracite)", "s_wpm": "Character speed (WPM)", "s_eff": "Effective speed, Farnsworth (WPM)", "s_tone": "Pitch (Hz)", "s_vol": "Volume", "s_call": "Your callsign", "s_side": "Browser sidetone when sending", "s_side_p": "Turn this off if your key interface has its own buzzer. The local tone has no delay.", "s_test": "Test tone", "s_note": "Rule of thumb: keep the character speed at 18 to 20 WPM or more. If that is too fast, lower the effective speed. That way you learn the sound of each character instead of counting dots.", "s_reset": "Reset progress"};
+function applyLang(){
+  const en=S.lang==='en';
+  document.documentElement.lang=en?'en':'de';
+  $$('[data-i18n]').forEach(el=>{ if(QS.phase&&['q-phase','q-hint','q-go'].includes(el.id)) return; if(el._de===undefined) el._de=el.innerHTML; const k=el.dataset.i18n; el.innerHTML=en&&I18N_EN[k]!=null?I18N_EN[k]:el._de; });
+  $$('[data-i18n-ph]').forEach(el=>{ if(el._deph===undefined) el._deph=el.placeholder; el.placeholder=en?I18N_EN[el.dataset.i18nPh]:el._deph; });
+  $$('.langbtn').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===S.lang)));
+  refreshStatus(); renderStart(); renderKoch(); rxStats(); hScore(); fistRender(); buildTree(); buildPads();
+  if(!GS.target) newTarget();
+  if(!KS.run) $('#k-prog').textContent=L(`Gruppe 0 von ${S.groups}`,`Group 0 of ${S.groups}`);
 }
 
 /* ---------- Routing ---------- */
@@ -654,11 +675,11 @@ function stopAll(){ stopAudio(); kochAbort(); rxAbort(); sideOff(); }
 function renderStart(){
   const set=kochSet();
   $('#t-level').textContent=S.level+' / '+(KOCH.length-1);
-  $('#t-level-sub').textContent=set.length+' von '+KOCH.length+' Zeichen';
+  $('#t-level-sub').textContent=set.length+L(' von ',' of ')+KOCH.length+L(' Zeichen',' characters');
   $('#t-solid').textContent=ALLCH.filter(ch=>{const c=P.chars[ch]; return c&&c.h.length>=10&&acc(ch)>=.9;}).length;
   const days=[]; for(let i=6;i>=0;i--){const d=new Date(); d.setDate(d.getDate()-i); days.push(Math.round((P.days[today(d)]||0)/60));}
   $('#t-today').textContent=days[6]+' min';
-  $('#t-week').textContent=days.reduce((a,b)=>a+b,0)+' min in 7 Tagen';
+  $('#t-week').textContent=days.reduce((a,b)=>a+b,0)+L(' min in 7 Tagen',' min in 7 days');
   const mx=Math.max(5,...days); let s='';
   days.forEach((m,i)=>{const h=Math.max(1.5,(m/mx)*30); s+=`<rect x="${i*20+2}" y="${32-h}" width="15" height="${h}" rx="2" fill="${i===6?'var(--accent)':'var(--line)'}"><title>${m} min</title></rect>`;});
   $('#t-spark').innerHTML=s;
@@ -667,7 +688,7 @@ function renderStart(){
     const a=acc(ch), c=P.chars[ch]; const unlocked=i<set.length;
     let cls='cell'; if(!unlocked&&!c) cls+=' locked'; else if(a===null) cls+=' fresh'; else if(c.h.length>=5&&a>=.9) cls+=' solid'; else if(a>=.7) cls+=' mid'; else cls+=' weak';
     const el=document.createElement('button'); el.type='button'; el.className=cls;
-    el.innerHTML=`<b>${esc(ch)}</b><small>${pretty(MORSE[ch])}</small><em>${a===null?(unlocked?'neu':'–'):Math.round(a*100)+' %'}</em>`;
+    el.innerHTML=`<b>${esc(ch)}</b><small>${pretty(MORSE[ch])}</small><em>${a===null?(unlocked?L('neu','new'):'–'):Math.round(a*100)+' %'}</em>`;
     el.setAttribute('aria-label',ch+(a===null?'':', '+Math.round(a*100)+' Prozent'));
     el.onclick=()=>play(ch); g.appendChild(el);
   });
@@ -688,13 +709,13 @@ function kochStart(){
   kochSetCache=kochSet(); KS.run=true; KS.i=0; KS.res=[]; $('#k-log').innerHTML=''; $('#k-result').innerHTML='';
   kochUI(true); $('#k-input').placeholder=''; kochNext();
 }
-function kochAbort(){ if(!KS.run) return; KS.run=false; KS.token++; kochUI(false); $('#k-input').placeholder='Start drücken'; persist(); }
+function kochAbort(){ if(!KS.run) return; KS.run=false; KS.token++; kochUI(false); $('#k-input').placeholder=L('Start drücken','Press start'); persist(); }
 async function kochNext(){
   if(!KS.run) return;
   if(KS.i>=S.groups) return kochFinish();
   let g=''; for(let j=0;j<S.group;j++) g+=pickChar(kochSetCache);
   KS.cur=g; KS.i++; KS.checking=false;
-  $('#k-prog').textContent=`Gruppe ${KS.i} von ${S.groups}`; $('#k-bar').style.width=((KS.i-1)/S.groups*100)+'%';
+  $('#k-prog').textContent=L(`Gruppe ${KS.i} von ${S.groups}`,`Group ${KS.i} of ${S.groups}`); $('#k-bar').style.width=((KS.i-1)/S.groups*100)+'%';
   const inp=$('#k-input'); inp.value=''; inp.focus(); KS.t0=performance.now();
   await play(g);
 }
@@ -704,9 +725,9 @@ function kochCheck(){
   let ok=0, html='';
   for(let j=0;j<cur.length;j++){const good=typed[j]===cur[j]; rec(cur[j],good); if(good) ok++; html+=`<span class="${good?'cg':'cb'}">${esc(cur[j])}</span>`;}
   KS.res.push(ok/cur.length); addTime((performance.now()-KS.t0)/1000); persist();
-  const total=KS.res.reduce((a,b)=>a+b,0)/KS.res.length; $('#k-acc').textContent=Math.round(total*100)+' % richtig';
+  const total=KS.res.reduce((a,b)=>a+b,0)/KS.res.length; $('#k-acc').textContent=Math.round(total*100)+L(' % richtig',' % correct');
   const row=document.createElement('div'); row.className='logrow';
-  row.innerHTML=`<span class="small muted">${KS.i}</span><div><div class="chars">${html}</div><div class="typed">du: ${esc(typed||'(leer)')}</div></div><button class="btn ghost small" type="button">▶</button>`;
+  row.innerHTML=`<span class="small muted">${KS.i}</span><div><div class="chars">${html}</div><div class="typed">${L('du','you')}: ${esc(typed||L('(leer)','(empty)'))}</div></div><button class="btn ghost small" type="button">▶</button>`;
   row.querySelector('button').onclick=()=>play(cur);
   $('#k-log').prepend(row);
   stopAudio();
@@ -716,10 +737,10 @@ function kochFinish(){
   KS.run=false; kochUI(false); $('#k-bar').style.width='100%';
   const total=KS.res.reduce((a,b)=>a+b,0)/KS.res.length; const pct=Math.round(total*100);
   let msg;
-  if(total>=.9&&S.level<KOCH.length-1){S.level++; saveS(); msg=`<div class="result pass">${pct} % richtig. Lektion bestanden, neu dabei: <span class="mono">${esc(KOCH[S.level])}</span> (${pretty(MORSE[KOCH[S.level]])}).</div>`;}
-  else if(total>=.9){msg=`<div class="result pass">${pct} % richtig. Du kennst alle Koch-Zeichen. Weiter mit Mitschreiben und QSO.</div>`;}
-  else msg=`<div class="result fail">${pct} % richtig. Für die nächste Lektion braucht es 90 %. Nochmals, die schwachen Zeichen kommen jetzt häufiger.</div>`;
-  $('#k-result').innerHTML=msg; $('#k-input').placeholder='Start drücken'; persist(); renderKoch();
+  if(total>=.9&&S.level<KOCH.length-1){S.level++; saveS(); msg=`<div class="result pass">${pct} % ${L('richtig. Lektion bestanden, neu dabei:','correct. Lesson passed, new:')} <span class="mono">${esc(KOCH[S.level])}</span> (${pretty(MORSE[KOCH[S.level]])}).</div>`;}
+  else if(total>=.9){msg=`<div class="result pass">${pct} % ${L('richtig. Du kennst alle Koch-Zeichen. Weiter mit Mitschreiben und QSO.','correct. You know all Koch characters. Carry on with copying and QSO.')}</div>`;}
+  else msg=`<div class="result fail">${pct} % ${L('richtig. Für die nächste Lektion braucht es 90 %. Nochmals, die schwachen Zeichen kommen jetzt häufiger.','correct. The next lesson needs 90 %. Try again, weak characters now come up more often.')}</div>`;
+  $('#k-result').innerHTML=msg; $('#k-input').placeholder=L('Start drücken','Press start'); persist(); renderKoch();
 }
 
 /* ---------- Reflex ---------- */
@@ -746,7 +767,7 @@ function rxAnswer(k){
   const tk=++RX.token;
   $('#rx-big').textContent=RX.cur; $('#rx-pat').textContent=pretty(MORSE[RX.cur]);
   if(ok){ RX.hits++; RX.rts.push(rt); (RX.per[RX.cur]=RX.per[RX.cur]||[]).push(rt); $('#rx-big').className='bigchar flash-ok'; $('#rx-pat').textContent=Math.round(rt)+' ms'; rxStats(); setTimeout(()=>{if(tk===RX.token) rxNext();},450); }
-  else{ (RX.per[RX.cur]=RX.per[RX.cur]||[]).push(3000); $('#rx-big').className='bigchar flash-no'; $('#rx-pat').textContent=pretty(MORSE[RX.cur])+(k?'   du: '+k:'   zu langsam'); rxStats();
+  else{ (RX.per[RX.cur]=RX.per[RX.cur]||[]).push(3000); $('#rx-big').className='bigchar flash-no'; $('#rx-pat').textContent=pretty(MORSE[RX.cur])+(k?L('   du: ','   you: ')+k:L('   zu langsam','   too slow')); rxStats();
     setTimeout(()=>{ if(tk!==RX.token) return; play(RX.cur).then(()=>setTimeout(()=>{if(tk===RX.token) rxNext();},700)); },350); }
 }
 const median=a=>{if(!a.length) return null; const s=[...a].sort((x,y)=>x-y); const m=s.length>>1; return s.length%2?s[m]:(s[m-1]+s[m])/2;};
@@ -756,7 +777,7 @@ function rxStats(){
   const m=median(RX.rts); $('#rx-k-med').textContent=m==null?'–':Math.round(m)+' ms';
   $('#rx-k-best').textContent=P.reflexBest?P.reflexBest+' ms':'–';
   const slow=Object.entries(RX.per).map(([c,a])=>[c,median(a)]).sort((a,b)=>b[1]-a[1]).slice(0,6);
-  const el=$('#rx-slow'); if(!slow.length){el.innerHTML='<span class="small muted">Noch keine Daten</span>'; return;}
+  const el=$('#rx-slow'); if(!slow.length){el.innerHTML='<span class="small muted">'+L('Noch keine Daten','No data yet')+'</span>'; return;}
   el.innerHTML=''; slow.forEach(([c,m])=>{const b=document.createElement('button'); b.type='button'; b.className='chip'; b.innerHTML=`${esc(c)}&nbsp;<span class="small muted">${m>=3000?'✗':Math.round(m)}</span>`; b.onclick=()=>play(c); el.appendChild(b);});
 }
 function rxFinish(){
@@ -764,18 +785,18 @@ function rxFinish(){
   const m=median(RX.rts); const pct=Math.round(RX.hits/RX.total*100);
   let best=false; if(m!=null&&pct>=80&&(!P.reflexBest||m<P.reflexBest)){P.reflexBest=Math.round(m); best=true;}
   persist(); rxStats();
-  $('#rx-result').innerHTML=`<div class="result ${pct>=90?'pass':'fail'}">${pct} % Treffer, Median ${m==null?'–':Math.round(m)+' ms'}.${best?' Neuer Bestwert.':''}</div>`;
-  $('#rx-big').textContent='·'; $('#rx-big').className='bigchar'; $('#rx-pat').textContent='Runde beendet';
+  $('#rx-result').innerHTML=`<div class="result ${pct>=90?'pass':'fail'}">${pct} % ${L('Treffer','hits')}, Median ${m==null?'–':Math.round(m)+' ms'}.${best?L(' Neuer Bestwert.',' New best.'):''}</div>`;
+  $('#rx-big').textContent='·'; $('#rx-big').className='bigchar'; $('#rx-pat').textContent=L('Runde beendet','Round finished');
 }
 
 /* ---------- Mitschreiben ---------- */
 const HS={cur:null,checked:true,streak:0,pts:0,n:0,ok:0,wpm:null,t0:0,started:false};
 function genItem(src){
-  if(src==='woerter') return {text:rand(DE_WORDS)};
-  if(src==='abk'){const k=rand(Object.keys(ABK)); return {text:String(k),info:ABK[k]};}
-  if(src==='q'){const k=rand(Object.keys(QC)); const ask=Math.random()<.25&&k!=='QRZ'&&k!=='QRL'; return {text:k+(ask?'?':''),info:QC[k]+(ask?' (als Frage)':'')};}
+  if(src==='woerter') return {text:rand(S.lang==='en'?EN_WORDS:DE_WORDS)};
+  if(src==='abk'){const k=rand(Object.keys(ABK)); return {text:String(k),info:tr(ABK[k])};}
+  if(src==='q'){const k=rand(Object.keys(QC)); const ask=Math.random()<.25&&k!=='QRZ'&&k!=='QRL'; return {text:k+(ask?'?':''),info:tr(QC[k])+(ask?L(' (als Frage)',' (as a question)'):'')};}
   if(src==='calls'){const c=genCallInfo().call; return {text:c+(Math.random()<.1?'/P':'')};}
-  if(src==='zahlen'){const r=Math.random(); if(r<.3) return {text:rand(['599','579','559','589','569','449','339']),info:'RST-Rapport'}; if(r<.55) return {text:'5NN '+String(randint(1,999)).padStart(3,'0'),info:'Contest-Rapport mit Seriennummer'}; if(r<.8) return {text:String(randint(10,9999))}; return {text:String(randint(1,9))+'0'+String(randint(0,9))+' W',info:'Leistung in Watt'};}
+  if(src==='zahlen'){const r=Math.random(); if(r<.3) return {text:rand(['599','579','559','589','569','449','339']),info:L('RST-Rapport','RST report')}; if(r<.55) return {text:'5NN '+String(randint(1,999)).padStart(3,'0'),info:L('Contest-Rapport mit Seriennummer','contest report with serial number')}; if(r<.8) return {text:String(randint(10,9999))}; return {text:String(randint(1,9))+'0'+String(randint(0,9))+' W',info:L('Leistung in Watt','power in watts')};}
   const own=$('#h-own').value.toUpperCase().split(/\s+/).filter(w=>w&&[...w].every(c=>MORSE[c]));
   return {text:own.length?rand(own):'LEER'};
 }
@@ -796,10 +817,10 @@ function hCheck(reveal){
   if(ok){HS.ok++; HS.streak++; HS.pts+=Math.round(exp.replace(/ /g,'').length*w/5); if($('#h-adapt').checked) HS.wpm=Math.min(60,w+1);}
   else{HS.streak=0; if($('#h-adapt').checked&&!reveal) HS.wpm=Math.max(5,w-1);}
   addTime((performance.now()-HS.t0)/1000); persist();
-  $('#h-fb').innerHTML=`<div class="diff">${html}</div>${typed&&!ok?`<p class="small muted">du: <span class="mono">${esc(typed)}</span></p>`:''}${HS.cur.info?`<p class="note">${esc(HS.cur.text)} = ${esc(HS.cur.info)}</p>`:''}<p class="small muted"><kbd>Enter</kbd> für das nächste</p>`;
+  $('#h-fb').innerHTML=`<div class="diff">${html}</div>${typed&&!ok?`<p class="small muted">${L('du','you')}: <span class="mono">${esc(typed)}</span></p>`:''}${HS.cur.info?`<p class="note">${esc(HS.cur.text)} = ${esc(HS.cur.info)}</p>`:''}<p class="small muted"><kbd>Enter</kbd> ${L('für das nächste','for the next one')}</p>`;
   const row=document.createElement('div'); row.className='logrow'; const t=HS.cur.text;
   row.innerHTML=`<span class="${ok?'ok':'no'}">${ok?'✓':'✗'}</span><span>${esc(t)}</span><span class="small muted">${w}</span>`;
-  row.title='Anklicken zum Anhören'; row.style.cursor='pointer'; row.onclick=()=>play(t,{wpm:w,eff:Math.max(3,Math.round(w*S.eff/S.wpm))});
+  row.title=L('Anklicken zum Anhören','Click to hear it'); row.style.cursor='pointer'; row.onclick=()=>play(t,{wpm:w,eff:Math.max(3,Math.round(w*S.eff/S.wpm))});
   $('#h-log').prepend(row); while($('#h-log').children.length>25) $('#h-log').lastChild.remove();
   hScore();
 }
@@ -849,12 +870,12 @@ function renderOut(){
     for(const c of GS.target){ if(c===' '){html+=' '; continue;} const s=sent[k]; html+=`<span class="${s==null?'':(s===c?'cg':'cb')}">${esc(c)}</span>`; k++; }
     $('#g-target').innerHTML=html;
     if(sent.length>=tg.length&&!GS.done){ GS.done=true; let ok=0; for(let j=0;j<tg.length;j++) if(sent[j]===tg[j]) ok++;
-      $('#g-target').innerHTML+=` <span class="small ${ok===tg.length?'ok':'no'}" style="font-family:var(--f-body);letter-spacing:0">${ok===tg.length?'fehlerfrei':ok+' von '+tg.length+' richtig'}</span>`; addTime(10); persist(); }
+      $('#g-target').innerHTML+=` <span class="small ${ok===tg.length?'ok':'no'}" style="font-family:var(--f-body);letter-spacing:0">${ok===tg.length?L('fehlerfrei','no errors'):ok+L(' von ',' of ')+tg.length+L(' richtig',' correct')}</span>`; addTime(10); persist(); }
   }
 }
 function newTarget(){
   const v=$('#g-tgt').value; GS.done=false;
-  if(v==='none'){GS.target=''; $('#g-target').innerHTML='<span class="small muted" style="font-family:var(--f-body);letter-spacing:0">Gib, was du willst. Der Decoder schreibt mit.</span>'; return;}
+  if(v==='none'){GS.target=''; $('#g-target').innerHTML='<span class="small muted" style="font-family:var(--f-body);letter-spacing:0">'+L('Gib, was du willst. Der Decoder schreibt mit.','Send whatever you like. The decoder copies along.')+'</span>'; return;}
   if(v==='koch'){let g=''; const set=kochSet(); for(let i=0;i<5;i++) g+=rand(set); GS.target=g;}
   else GS.target=genItem(v).text.replace('/P','');
   GS.text=''; renderOut();
@@ -893,23 +914,23 @@ function padVis(sd){
 }
 function buildPads(){
   const m=gMode(); const w=$('#g-pads');
-  if(m==='straight'){ w.innerHTML='<div class="pad" id="pad-s" role="button" aria-label="Handtaste">TASTE<small>Leertaste</small></div>';
+  if(m==='straight'){ w.innerHTML='<div class="pad" id="pad-s" role="button" aria-label="'+L('Handtaste','Straight key')+'">'+L('TASTE','KEY')+'<small>'+L('Leertaste','Space')+'</small></div>';
     const p=$('#pad-s'); p.onpointerdown=e=>{e.preventDefault(); p.setPointerCapture(e.pointerId); straight(true);}; p.onpointerup=p.onpointercancel=e=>{e.preventDefault(); straight(false);}; }
-  else{ w.innerHTML='<div class="pad" id="pad-dit" role="button" aria-label="Punkt-Paddle">PUNKT ·<small>Strg links / J</small></div><div class="pad" id="pad-dah" role="button" aria-label="Strich-Paddle">STRICH –<small>Strg rechts / K</small></div>';
+  else{ w.innerHTML='<div class="pad" id="pad-dit" role="button" aria-label="Dit">'+L('PUNKT ·','DIT ·')+'<small>'+L('Strg links / J','Left Ctrl / J')+'</small></div><div class="pad" id="pad-dah" role="button" aria-label="Dah">'+L('STRICH –','DAH –')+'<small>'+L('Strg rechts / K','Right Ctrl / K')+'</small></div>';
     for(const [id,wh] of [['pad-dit','dit'],['pad-dah','dah']]){const p=$('#'+id); p.onpointerdown=e=>{e.preventDefault(); p.setPointerCapture(e.pointerId); paddle(wh,true);}; p.onpointerup=p.onpointercancel=e=>{e.preventDefault(); paddle(wh,false);};} }
-  $('#g-fnote').textContent=m==='straight'?'Misst dein Handtasten-Timing im Verhältnis zur Punktlänge. Mindestens 10 Elemente geben.':'Mit dem Paddle macht der Keyer das Element-Timing. Gemessen wird nur bei der Handtaste.';
+  $('#g-fnote').textContent=m==='straight'?L('Misst dein Handtasten-Timing im Verhältnis zur Punktlänge. Mindestens 10 Elemente geben.','Measures your straight-key timing relative to the dit length. Send at least 10 elements.'):L('Mit dem Paddle macht der Keyer das Element-Timing. Gemessen wird nur bei der Handtaste.','With a paddle the keyer does the element timing. Only the straight key is measured.');
 }
-function rate(v,ideal){const e=Math.abs(v-ideal)/ideal; return e<=.15?['gut','cg']:e<=.3?['ok','mid']:['üben','cb'];}
+function rate(v,ideal){const e=Math.abs(v-ideal)/ideal; return e<=.15?[L('gut','good'),'cg']:e<=.3?['ok','mid']:[L('üben','practice'),'cb'];}
 function fistRender(){
   const n=F.dit.length+F.dah.length; const el=$('#g-fist');
-  if(n<10){el.innerHTML=`<dt>Elemente</dt><dd>${n} / 10</dd>`; return;}
+  if(n<10){el.innerHTML=`<dt>${L('Elemente','Elements')}</dt><dd>${n} / 10</dd>`; return;}
   const avg=a=>a.reduce((x,y)=>x+y,0)/a.length;
   const d=F.dit.length?avg(F.dit):DEC.dit;
-  const rows=[['Punkt',Math.round(d)+' ms',null],['Tempo',Math.round(1200/d)+' WPM',null]];
-  if(F.dah.length) {const r=avg(F.dah)/d; rows.push(['Strich : Punkt',r.toFixed(2)+' (3,0)',rate(r,3)]);}
-  if(F.intra.length){const r=avg(F.intra)/d; rows.push(['Elementpause : Punkt',r.toFixed(2)+' (1,0)',rate(r,1)]);}
-  if(F.cgap.length>2){const r=avg(F.cgap)/d; rows.push(['Zeichenpause : Punkt',r.toFixed(2)+' (3,0)',rate(r,3)]);}
-  if(F.dit.length>4){const m=avg(F.dit); const sd=Math.sqrt(avg(F.dit.map(x=>(x-m)**2))); const cv=Math.max(0,100-sd/m*100); rows.push(['Gleichmass Punkte',Math.round(cv)+' %',cv>=85?['gut','cg']:cv>=70?['ok','mid']:['üben','cb']]);}
+  const rows=[[L('Punkt','Dit'),Math.round(d)+' ms',null],[L('Tempo','Speed'),Math.round(1200/d)+' WPM',null]];
+  if(F.dah.length) {const r=avg(F.dah)/d; rows.push([L('Strich : Punkt','Dah : dit'),r.toFixed(2)+L(' (3,0)',' (3.0)'),rate(r,3)]);}
+  if(F.intra.length){const r=avg(F.intra)/d; rows.push([L('Elementpause : Punkt','Element gap : dit'),r.toFixed(2)+L(' (1,0)',' (1.0)'),rate(r,1)]);}
+  if(F.cgap.length>2){const r=avg(F.cgap)/d; rows.push([L('Zeichenpause : Punkt','Character gap : dit'),r.toFixed(2)+L(' (3,0)',' (3.0)'),rate(r,3)]);}
+  if(F.dit.length>4){const m=avg(F.dit); const sd=Math.sqrt(avg(F.dit.map(x=>(x-m)**2))); const cv=Math.max(0,100-sd/m*100); rows.push([L('Gleichmass Punkte','Dit consistency'),Math.round(cv)+' %',cv>=85?[L('gut','good'),'cg']:cv>=70?['ok','mid']:[L('üben','practice'),'cb']]);}
   el.innerHTML=rows.map(([k,v,r])=>`<dt>${k}</dt><dd>${v}${r?`<span class="rate ${r[1]==='mid'?'':r[1]}" style="${r[1]==='mid'?'background:var(--mid-soft);color:var(--mid)':''}">${r[0]}</span>`:''}</dd>`).join('');
 }
 /* Morsebaum */
@@ -928,7 +949,7 @@ function buildTree(){
     circ+=`<g class="tn${ch||p===''?'':' empty'}" data-p="${p}" data-ch="${ch?esc(ch):''}"><circle cx="${x}" cy="${y}" r="${r}"></circle>${label?`<text x="${x}" y="${y}" style="${label.length>1?'font-size:9px':''}">${label}</text>`:''}</g>`;
   }
   const svg=$('#tree');
-  svg.innerHTML=`<text class="axis" x="20" y="16" style="text-anchor:start">· Punkt</text><text class="axis" x="940" y="16" style="text-anchor:end">Strich –</text>`+lines+circ;
+  svg.innerHTML=`<text class="axis" x="20" y="16" style="text-anchor:start">${L('· Punkt','· Dit')}</text><text class="axis" x="940" y="16" style="text-anchor:end">${L('Strich –','Dah –')}</text>`+lines+circ;
   svg.querySelectorAll('g.tn').forEach(g=>{ const ch=g.dataset.ch; if(ch) g.addEventListener('click',()=>{play(ch); treeShow(g.dataset.p,true); setTimeout(()=>treeShow(''),900);}); });
 }
 function treeShow(p,final){
@@ -977,8 +998,8 @@ function qGo(){
     if(type==='rag') QS.t1=`CQ CQ CQ DE ${s.call} ${s.call} K`;
     else if(type==='test') QS.t1=`CQ TEST ${s.call} ${s.call} TEST`;
     else QS.t1=`CQ POTA DE ${s.call} ${s.call} POTA K`;
-    QS.phase=1; $('#q-phase').textContent='1 · CQ hören'; $('#q-hint').textContent='Rufzeichen der rufenden Station mitschreiben, dann Enter.';
-    qFields([['call','Rufzeichen der Station']]); $('#q-go').textContent='Antworten'; $('#q-replay').disabled=false; $('#q-result').innerHTML='';
+    QS.phase=1; $('#q-phase').textContent=L('1 · CQ hören','1 · Hear CQ'); $('#q-hint').textContent=L('Rufzeichen der rufenden Station mitschreiben, dann Enter.','Copy the calling station\'s callsign, then Enter.');
+    qFields([['call',L('Rufzeichen der Station','Station callsign')]]); $('#q-go').textContent=L('Antworten','Reply'); $('#q-replay').disabled=false; $('#q-result').innerHTML='';
     QS.cur=QS.t1; play(QS.t1); return;
   }
   const s=QS.st;
@@ -986,17 +1007,17 @@ function qGo(){
     const v=norm($('#q-call').value); const ok=v===s.call; mark('call',ok,s.call);
     QS.log.push(['Station',QS.t1]);
     const reply=QS.type==='test'?`${my}`:QS.type==='pota'?`${my}`:`${s.call} DE ${my} ${my} K`;
-    QS.log.push(['Du',reply]);
+    QS.log.push([L('Du','You'),reply]);
     if(QS.type==='rag') QS.t2=`${my} DE ${s.call} ${greet()} TNX FER CALL = UR RST ${s.rst} ${s.rst} = NAME ${s.name} ${s.name} = QTH ${s.qth} ${s.qth} = HW? <AR> ${my} DE ${s.call} <KN>`;
     else if(QS.type==='test') QS.t2=`${my} 5NN ${numTxt(s.nr)}`;
     else QS.t2=`${my} TU UR ${s.rst.replace(/9/g,$('#q-cut').checked?'N':'9')} ${s.rst.replace(/9/g,$('#q-cut').checked?'N':'9')} ${s.park} ${s.park} <BT> 73 <KN>`;
-    QS.phase=2; $('#q-phase').textContent='2 · Durchgang aufnehmen';
-    $('#q-hint').textContent=ok?'Rufzeichen richtig. Du hast geantwortet, jetzt kommt die Antwort.':'Rufzeichen war '+s.call+'. Weiter geht es trotzdem.';
+    QS.phase=2; $('#q-phase').textContent=L('2 · Durchgang aufnehmen','2 · Copy the over');
+    $('#q-hint').textContent=ok?L('Rufzeichen richtig. Du hast geantwortet, jetzt kommt die Antwort.','Callsign correct. You replied, here comes the answer.'):L('Rufzeichen war ','Callsign was ')+s.call+L('. Weiter geht es trotzdem.','. Carrying on anyway.');
     setTimeout(()=>{
       if(QS.type==='rag') qFields([['rst','RST'],['name','Name'],['qth','QTH']]);
-      else if(QS.type==='test') qFields([['nr','Seriennummer']]);
-      else qFields([['rst','RST'],['park','Park-Referenz']]);
-      $('#q-go').textContent='Auswerten'; QS.cur=QS.t2; play(QS.t2);
+      else if(QS.type==='test') qFields([['nr',L('Seriennummer','Serial number')]]);
+      else qFields([['rst','RST'],['park',L('Park-Referenz','Park reference')]]);
+      $('#q-go').textContent=L('Auswerten','Check'); QS.cur=QS.t2; play(QS.t2);
     },500);
     return;
   }
@@ -1008,11 +1029,11 @@ function qGo(){
     else { mark('rst',digits(val('rst'))===s.rst,s.rst); mark('park',val('park').replace(/\s/g,'')===s.park,s.park); }
     QS.log.push(['Station',QS.t2]);
     const fin=QS.type==='rag'?`${s.call} DE ${my} R TNX ${s.name} UR RST 599 = NAME ... = QTH ... 73 <SK>`:QS.type==='test'?`TU 5NN ${numTxt(randint(1,300))}`:`TU 5NN 73`;
-    QS.log.push(['Du (Beispiel)',fin]);
+    QS.log.push([L('Du (Beispiel)','You (example)'),fin]);
     const [ok,tot]=QS.score; P.qso.n++; P.qso.ok+=ok; P.qso.tot+=tot; persist(); addTime(30);
-    $('#q-result').innerHTML=`<div class="result ${ok===tot?'pass':'fail'}">${ok} von ${tot} Feldern richtig${ok===tot?'. Sauberes QSO.':'.'}</div>`;
+    $('#q-result').innerHTML=`<div class="result ${ok===tot?'pass':'fail'}">${ok}${L(' von ',' of ')}${tot}${L(' Feldern richtig',' fields correct')}${ok===tot?L('. Sauberes QSO.','. Clean QSO.'):'.'}</div>`;
     $('#q-log').innerHTML=QS.log.map(([w,t])=>`<div><div class="who">${esc(w)}</div>${esc(t)}</div>`).join('');
-    QS.phase=3; $('#q-phase').textContent='Fertig'; $('#q-hint').textContent='Rote Felder zeigen die richtige Angabe.'; $('#q-go').textContent='Nächstes QSO';
+    QS.phase=3; $('#q-phase').textContent=L('Fertig','Done'); $('#q-hint').textContent=L('Rote Felder zeigen die richtige Angabe.','Red fields show the correct value.'); $('#q-go').textContent=L('Nächstes QSO','Next QSO');
     qStats(); play(QS.type==='rag'?`${my} DE ${s.call} TU 73 <SK> E E`:'TU E E');
   }
 }
@@ -1030,7 +1051,7 @@ function init(){
   $('#k-hearnew').onclick=()=>{const c=kochSet().slice(-1)[0]; play(`${c} ${c} ${c}`);};
   $('#k-up').onclick=()=>{ if(S.level<KOCH.length-1){S.level++; saveS(); renderKoch();} };
   $('#k-down').onclick=()=>{ if(S.level>1){S.level--; saveS(); renderKoch();} };
-  $('#rx-start').onclick=rxStart; $('#rx-stop').onclick=()=>{rxAbort(); stopAudio(); $('#rx-big').textContent='·'; $('#rx-pat').textContent='Abgebrochen';};
+  $('#rx-start').onclick=rxStart; $('#rx-stop').onclick=()=>{rxAbort(); stopAudio(); $('#rx-big').textContent='·'; $('#rx-pat').textContent=L('Abgebrochen','Cancelled');};
   $('#h-start').onclick=()=>{HS.wpm=null; hNext();};
   $('#h-replay').onclick=()=>{ if(HS.cur) hPlay(); $('#h-input').focus(); };
   $('#h-reveal').onclick=()=>{ hCheck(true); $('#h-input').focus(); };
@@ -1047,7 +1068,7 @@ function init(){
   buildTree(); buildPads(); newTarget(); fistRender();
   DEC.dit=ditMs();
   window.addEventListener('hashchange',route);
-  renderAll(); route();
+  renderAll(); applyLang(); route();
 }
 init();
 </script>

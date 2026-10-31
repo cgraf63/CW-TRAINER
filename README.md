@@ -1,12 +1,12 @@
 # CW-TRAINER
 
-CW Trainer mit T-EMBED: Morse lernen im Browser und mit einem echten Paddle oder einer Handtaste am LilyGO T-Embed (ESP32-S3).
+**DitDah Lab**: CW lernen Morse lernen im Browser und mit einem echten Paddle oder einer Handtaste am LilyGO T-Embed (ESP32-S3).
 
 ## Inhalt
 
 | Ordner | Was |
 |---|---|
-| `web/` | CW-Lernstation, eine einzelne HTML-Datei, läuft in jedem Browser |
+| `web/` | **DitDah Lab**, eine einzelne HTML-Datei, läuft in jedem Browser. Deutsch und Englisch (Einstellungen → Sprache) |
 | `firmware/tembed_cw_key/` | Firmware für den LilyGO T-Embed (Originalversion mit LED-Ring) |
 | `firmware/esp32s3_generic/` | Einfache Firmware für ein beliebiges ESP32-S3- oder S2-Board |
 
